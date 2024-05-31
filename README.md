@@ -30,7 +30,7 @@ Smartexia is an innovative e-commerce application designed for buying and sellin
 ## Technologies Used
 <ul>
 <li><strong>Frontend</strong>: React Native, Redux, HTML5, CSS3, JavaScript</li>
-<li><strong>Backend</strong>: ASP.NET Core Web API, Entity Framework Core, C#</li>
+<li><strong>Backend</strong>: ASP.NET Core Web API, Entity Framework Core, C#, LINQ (Language Integrated Query), Dependency Injection, Swagger, AutoMapper</li>
 <li><strong>Database</strong>: Supabase (postgresql)</li>
 <li><strong>Payment Gateway</strong>: Stripe</li>
 <li><strong>Authentication</strong>: JWT, OAuth</li>
