@@ -1,5 +1,3 @@
-Here's a structured and comprehensive `README.md` file for your Smartexia e-commerce application:
-
 ```markdown
 # Smartexia
 
