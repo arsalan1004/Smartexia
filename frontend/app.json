@@ -34,7 +34,7 @@
       [
         "expo-font",
         {
-          "fonts": ["./assets/fonts/oxygenlight.ttf"]
+          "fonts": ["./assets/fonts/oxygen.ttf"]
         }
       ]
     ]

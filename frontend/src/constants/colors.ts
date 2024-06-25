@@ -9,6 +9,7 @@ const COLORS = {
   secondary: "#FFA8BA",
   tertiary: "#FA5246",
   textGray: "#80869A",
+  lightGray: "#E2E2E2",
   success: "#82DD55",
   error: "#E23636",
   warning: "#EDB95E",
@@ -38,10 +39,33 @@ const ON_BOARDING_TEXT: { [key: string]: OnBoardingTextType } = {
 const h1Oxygen: TextStyle = {
   fontSize: 24,
   fontWeight: "bold",
-  //fontFamily: "Oxygen",
+  fontFamily: "oxygen",
 };
+const h5Oxygen: TextStyle = {
+  fontSize: 16,
+  fontWeight: "bold",
+  fontFamily: "oxygen",
+};
+
+const b1Roboto: TextStyle = {
+  fontSize: 16,
+  fontWeight: "semibold",
+};
+
 const b2Roboto: TextStyle = {
   fontSize: 14,
   fontWeight: "semibold",
 };
-export { COLORS, h1Oxygen, b2Roboto, ON_BOARDING_TEXT };
+const b3Roboto: TextStyle = {
+  fontSize: 12,
+  fontWeight: "semibold",
+};
+export {
+  COLORS,
+  h1Oxygen,
+  h5Oxygen,
+  b1Roboto,
+  b2Roboto,
+  b3Roboto,
+  ON_BOARDING_TEXT,
+};

@@ -39,6 +39,7 @@ export default function OnBoarding({
         variant="secondary"
         onPressAction={buttonAction}
         bottomPosition={40}
+        widthPC={90}
       />
     </View>
   );
@@ -59,6 +60,7 @@ const styles = StyleSheet.create({
   },
   titleText: {
     ...h1Oxygen,
+    fontFamily: "oxygen",
     color: COLORS.fgPrimary,
     textAlign: "center",
   },
