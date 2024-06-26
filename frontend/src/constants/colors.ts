@@ -58,7 +58,7 @@ const b2Roboto: TextStyle = {
 };
 const b3Roboto: TextStyle = {
   fontSize: 12,
-  fontWeight: "semibold",
+  //fontWeight: "semibold",
 };
 export {
   COLORS,

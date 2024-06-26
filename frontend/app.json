@@ -18,7 +18,8 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#00473E"
-      }
+      },
+      "package": "com.smartexia.ecommerce"
     },
     "web": {
       "favicon": "./assets/favicon.png"
@@ -34,9 +35,12 @@
       [
         "expo-font",
         {
-          "fonts": ["./assets/fonts/oxygen.ttf"]
+          "fonts": [
+            "./assets/fonts/oxygen.ttf"
+          ]
         }
       ]
-    ]
+    ],
+    "scheme": "com.smartexia.ecommerce"
   }
 }
