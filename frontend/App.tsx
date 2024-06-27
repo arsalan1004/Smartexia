@@ -22,7 +22,7 @@ SplashScreen.preventAutoHideAsync();
 type OnBoardingCompleteType = "true" | "false";
 
 export type RootLoggedOutStackParamList = {
-  login: { onLoginComplete: () => void };
+  login: undefined;
   registration: undefined;
 };
 
@@ -130,7 +130,7 @@ function App() {
           headerShown: false,
         }}
       >
-        <loggedOutStack.Screen name="login" component={Login as any} />
+        <loggedOutStack.Screen name="login" component={Login} />
         <loggedOutStack.Screen name="registration" component={Registration} />
       </loggedOutStack.Navigator>
     );

@@ -1,12 +1,13 @@
 import { View, Text, StyleSheet, Pressable } from "react-native";
 import React from "react";
+import { CustomTextStyle } from "../../constants/colors";
 
-type PropTypes = {
+type PropTypes = CustomTextStyle & {
   title: string;
   onPressAction: () => void;
   fontSize?: number;
-  fontFamily?: "Roboto" | "oxygen";
-  fontWeight?: "bold" | "normal";
+  fontFamily?: string;
+  fontWeight?: "bold" | "normal" | "semibold";
   disabled?: boolean;
   color: string;
 };

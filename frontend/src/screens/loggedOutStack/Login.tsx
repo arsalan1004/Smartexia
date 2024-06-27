@@ -1,27 +1,15 @@
-import {
-  View,
-  Text,
-  StyleSheet,
-  StatusBar,
-  TextInput,
-  Pressable,
-  Keyboard,
-} from "react-native";
+import { View, Text, StyleSheet, TextInput, Keyboard } from "react-native";
 
 import React, { useContext, useEffect, useState } from "react";
-import {
-  COLORS,
-  b2Roboto,
-  b3Roboto,
-  h1Oxygen,
-  h5Oxygen,
-} from "../../constants/colors";
+import { COLORS, h5Oxygen } from "../../constants/colors";
 import { Controller, useForm } from "react-hook-form";
-import Ionicon from "@expo/vector-icons/Ionicons";
 import MainButton from "../../components/UI/MainButton";
 import TextButton from "../../components/UI/TextButton";
 import Toast from "../../components/UI/Toast";
-import { usePostLoginDataMutation } from "../../features/login/loginDataApi";
+import {
+  usePostGoogleLoginDataMutation,
+  usePostLoginDataMutation,
+} from "../../features/loginReg/loginDataApi";
 import { makeRedirectUri } from "expo-auth-session";
 import { useAuthRequest } from "expo-auth-session/providers/google";
 
@@ -36,38 +24,51 @@ import type { RouteProp } from "@react-navigation/native";
 
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import LoginContext from "../../context/LoginContext";
+import { RegistrationFormFields } from "./Registration";
+import MaskPasswordButton from "../../components/UI/MaskPasswordButton";
+import SwitchScreen from "../../components/login/SwitchScreen";
+import { loginRegStyles } from "../../constants/SharedStyles";
 
-type HomeScreenNavigationProp = NativeStackNavigationProp<
+// TODO
+/**
+ * Add correct Validation Rules
+ */
+
+type LoginScreenNavigationProp = NativeStackNavigationProp<
   RootLoggedOutStackParamList,
   "login"
 >;
-type HomeScreenRouteProp = RouteProp<
-  RootLoggedOutStackParamList,
-  "registration"
->;
+type LoginScreenRouteProp = RouteProp<RootLoggedOutStackParamList, "login">;
 
 type PropTypes = {
-  navigation: HomeScreenNavigationProp;
-  route: HomeScreenRouteProp;
+  navigation: LoginScreenNavigationProp;
+  route: LoginScreenRouteProp;
 };
 
-export type FormFields = {
-  email: string;
-  password: string;
-};
+export type LoginFormFields = Pick<
+  RegistrationFormFields,
+  "email" | "password"
+>;
 
-const Login = ({ navigation, route }: PropTypes) => {
+export type GoogleLoginFields = Pick<RegistrationFormFields, "name" | "email">;
+
+const Login = ({ navigation }: PropTypes) => {
+  const [postLoginData, { isError, isLoading, isSuccess }] =
+    usePostLoginDataMutation();
+  const [postGoogleLoginData] = usePostGoogleLoginDataMutation();
+
   const {
     control,
     handleSubmit,
     formState: { errors, isSubmitting, isSubmitSuccessful },
     setError,
-  } = useForm<FormFields>({
+  } = useForm<LoginFormFields>({
     defaultValues: {
       // email: "Test@email.com",
       // password: "1234567",
     },
   });
+
   const [isPasswordMasked, setIsPasswordMasked] = useState(true);
   const [isToastVisible, setIsToastVisible] = useState(false);
   //const [user, setUser] = useState();
@@ -106,6 +107,13 @@ const Login = ({ navigation, route }: PropTypes) => {
         .then((userCredential) => {
           const userData = userCredential.user;
           console.log(userData);
+
+          const googleData: GoogleLoginFields = {
+            email: userData.email as string,
+            name: userData.displayName as string,
+          };
+
+          postGoogleLoginData(googleData);
         })
         .catch((error) => {
           console.error("Error signing in with credential", error);
@@ -115,7 +123,7 @@ const Login = ({ navigation, route }: PropTypes) => {
     }
   }, [response]);
 
-  const onSubmit = async (data: FormFields) => {
+  const onSubmit = async (data: LoginFormFields) => {
     Keyboard.dismiss();
     try {
       //const response = await postLoginData(data);
@@ -129,33 +137,47 @@ const Login = ({ navigation, route }: PropTypes) => {
       console.log(data);
       updateIsLoggedIn(true);
     }
+
+    const response = await postLoginData(data);
+    console.log(response);
+    // try {
+    //   const { message, status } = await postLoginData(data);
+
+    //   if(status === 404 || status === 401) {
+    //     setError("root", { message: message });
+    //   }
+    //   else if (status === 200) {
+    //     AsyncStorage.setItem("@isLoggedIn", "true");
+    //     updateIsLoggedIn(true);
+    //   }
+    // }
   };
 
   console.log("Is Submit Succesful", isSubmitSuccessful);
   console.log("Root Erros", Boolean(errors.root));
   return (
     <AuthProvider value={{ promptAsync }}>
-      <View style={styles.container}>
-        <View style={styles.innerContainer}>
-          <Text style={styles.titleText}>Log In</Text>
+      <View style={loginRegStyles.container}>
+        <View style={loginRegStyles.innerContainer}>
+          <Text style={loginRegStyles.titleText}>Log In</Text>
 
-          <View style={styles.inputContainer}>
-            <Text style={styles.fieldLabel}>Email</Text>
-            <View style={styles.fieldContainer}>
+          <View style={loginRegStyles.inputContainer}>
+            <Text style={loginRegStyles.fieldLabel}>Email</Text>
+            <View style={loginRegStyles.fieldContainer}>
               <Controller
                 control={control}
                 name="email"
                 rules={{
                   required: "Email is required",
                   validate: (value) => {
-                    if (!value.includes("@")) {
+                    if (!value.includes("@") && value.trim().length > 0) {
                       return "Invalid Email Address";
                     } else return true;
                   },
                 }}
                 render={({ field: { onChange, onBlur, value } }) => (
                   <TextInput
-                    style={styles.inputField}
+                    style={loginRegStyles.inputField}
                     onBlur={onBlur}
                     onChangeText={onChange}
                     value={value}
@@ -165,12 +187,14 @@ const Login = ({ navigation, route }: PropTypes) => {
               />
             </View>
             {errors.email && (
-              <Text style={styles.fieldError}>{errors.email.message}</Text>
+              <Text style={loginRegStyles.fieldError}>
+                {errors.email.message}
+              </Text>
             )}
           </View>
-          <View style={styles.inputContainer}>
-            <Text style={styles.fieldLabel}>Password</Text>
-            <View style={styles.fieldContainer}>
+          <View style={loginRegStyles.inputContainer}>
+            <Text style={loginRegStyles.fieldLabel}>Password</Text>
+            <View style={loginRegStyles.fieldContainer}>
               <Controller
                 control={control}
                 name="password"
@@ -183,7 +207,7 @@ const Login = ({ navigation, route }: PropTypes) => {
                 }}
                 render={({ field: { onChange, onBlur, value } }) => (
                   <TextInput
-                    style={styles.inputField}
+                    style={loginRegStyles.inputField}
                     onBlur={onBlur}
                     onChangeText={onChange}
                     value={value}
@@ -192,25 +216,23 @@ const Login = ({ navigation, route }: PropTypes) => {
                   />
                 )}
               />
-              <Pressable style={({ pressed }) => [pressed && { opacity: 0.7 }]}>
-                <Ionicon
-                  size={24}
-                  color={COLORS.fgPrimary}
-                  name={isPasswordMasked ? "eye-off-outline" : "eye-outline"}
-                  onPress={() => setIsPasswordMasked(!isPasswordMasked)}
-                />
-              </Pressable>
+              <MaskPasswordButton
+                isPasswordMasked={isPasswordMasked}
+                setIsPasswordMasked={setIsPasswordMasked}
+              />
             </View>
 
             {errors.password && (
-              <Text style={styles.fieldError}>{errors.password.message}</Text>
+              <Text style={loginRegStyles.fieldError}>
+                {errors.password.message}
+              </Text>
             )}
           </View>
           <View style={styles.forgotPasswordbtn}>
             <TextButton
+              {...h5Oxygen}
               title="Forgot Password"
               onPressAction={() => {}}
-              {...(h5Oxygen! as any)}
               color={COLORS.textPrimary}
             />
           </View>
@@ -222,17 +244,11 @@ const Login = ({ navigation, route }: PropTypes) => {
             variant="primary"
           />
           <GoogleButton />
-          <View style={styles.registrationTextContainer}>
-            <Text style={styles.registrationText}>Don't Have an account? </Text>
-            <TextButton
-              title="Register"
-              onPressAction={() => {
-                navigation.navigate("registration");
-              }}
-              {...(b3Roboto! as any)}
-              color={COLORS.textPrimary}
-            />
-          </View>
+          <SwitchScreen
+            text="Don't have an account?"
+            buttonText="Register"
+            onPressSwitch={() => navigation.navigate("registration")}
+          />
 
           {isToastVisible && (
             <Toast
@@ -251,60 +267,8 @@ const Login = ({ navigation, route }: PropTypes) => {
 export default Login;
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: "center",
-    //borderWidth: 1,
-    marginTop: StatusBar.currentHeight!,
-  },
-  innerContainer: {
-    flex: 1,
-    width: "90%",
-    //borderWidth: 1,
-  },
-  inputContainer: {
-    marginTop: 30,
-  },
-  fieldContainer: {
-    borderWidth: 1,
-    borderColor: COLORS.lightGray,
-    borderRadius: 30,
-    paddingVertical: 8,
-    paddingHorizontal: 20,
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-  },
-  fieldLabel: {
-    color: COLORS.textGray,
-    ...b2Roboto,
-    marginLeft: 20,
-  },
-  inputField: {
-    width: "80%",
-    fontSize: 16,
-  },
-  fieldError: {
-    ...b2Roboto,
-    color: COLORS.error,
-    marginLeft: 20,
-    marginTop: 5,
-  },
-
-  titleText: {
-    ...h1Oxygen,
-    color: COLORS.fgPrimary,
-  },
   forgotPasswordbtn: {
     alignSelf: "flex-end",
     marginVertical: 20,
-  },
-  registrationTextContainer: {
-    flexDirection: "row",
-    marginTop: 20,
-  },
-  registrationText: {
-    ...b3Roboto,
-    color: COLORS.textGray,
   },
 });
