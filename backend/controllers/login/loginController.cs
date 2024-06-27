@@ -22,8 +22,6 @@ public class loginController: Controller
         {
             return Ok(users);
         }
-
         return NotFound();
-
     }
 }
