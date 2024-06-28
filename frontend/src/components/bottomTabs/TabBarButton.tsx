@@ -22,6 +22,8 @@ type PropTypes = BottomTabBarButtonProps & {
   children: React.ReactNode;
 };
 
+import { TabBarButtonNavigationProp } from "../../navigation/HomeTabs";
+
 const TabBarButton = ({
   focused,
   size,
@@ -30,10 +32,8 @@ const TabBarButton = ({
   selectedIcon,
   routeName,
 }: PropTypes) => {
-  type TabBarButtonNavigationProp = BottomTabNavigationProp<
-    RootHomeTabsParamList,
-    keyof RootHomeTabsParamList
-  >; // Replace 'T' with a valid type, such as 'string'
+  // Replace 'T' with a valid type, such as 'string'
+
   const navigation = useNavigation<TabBarButtonNavigationProp>();
 
   const onPressHandler = () => {

@@ -1,11 +1,17 @@
 import React from "react";
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import {
+  BottomTabNavigationProp,
+  createBottomTabNavigator,
+} from "@react-navigation/bottom-tabs";
 import Home from "../screens/loggedInStack/homeTabs/Home";
 import Cart from "../screens/loggedInStack/homeTabs/Cart";
 import More from "../screens/loggedInStack/homeTabs/More";
 import Search from "../screens/loggedInStack/homeTabs/Search";
 import TabBarButton from "../components/bottomTabs/TabBarButton";
-
+import { COLORS } from "../constants/colors";
+import { Ionicons } from "@expo/vector-icons";
+import { Pressable } from "react-native";
+import { useNavigation } from "@react-navigation/native";
 type Props = {};
 
 export type RootHomeTabsParamList = {
@@ -14,6 +20,11 @@ export type RootHomeTabsParamList = {
   orders: undefined;
   more: undefined;
 };
+
+export type TabBarButtonNavigationProp = BottomTabNavigationProp<
+  RootHomeTabsParamList,
+  keyof RootHomeTabsParamList
+>;
 
 const HomeBottomTab = createBottomTabNavigator<RootHomeTabsParamList>();
 
@@ -25,13 +36,21 @@ const screenOpt = {
     bottom: 0,
     right: 0,
     left: 0,
-    elevation: -40,
     height: 60,
-    backgroundColor: "white",
+    backgroundColor: COLORS.bgPrimary,
+    borderTopWidth: 2,
   },
+  headerStyle: {
+    backgroundColor: COLORS.bgPrimary,
+    borderBottomWidth: 1,
+    //borderBottomColor: COLORS.fgPrimary,
+  },
+  headerTintColor: COLORS.fgPrimary,
 };
 
 const HomeTabs = (props: Props) => {
+  const navigation = useNavigation<TabBarButtonNavigationProp>();
+
   return (
     <HomeBottomTab.Navigator screenOptions={screenOpt}>
       <HomeBottomTab.Screen
@@ -39,6 +58,7 @@ const HomeTabs = (props: Props) => {
         component={Home}
         options={{
           tabBarHideOnKeyboard: true,
+          title: "Home",
           tabBarButton: ({ accessibilityState }) => {
             return (
               <TabBarButton
@@ -53,12 +73,27 @@ const HomeTabs = (props: Props) => {
               />
             );
           },
+          headerRight: () => {
+            return (
+              <Pressable
+                style={{ marginRight: 10 }}
+                onPress={() => navigation.navigate("orders")}
+              >
+                <Ionicons
+                  name="cart-outline"
+                  size={30}
+                  color={COLORS.fgPrimary}
+                />
+              </Pressable>
+            );
+          },
         }}
       />
       <HomeBottomTab.Screen
         name="search"
         component={Search}
         options={{
+          title: "Search",
           tabBarButton: ({ accessibilityState }) => {
             return (
               <TabBarButton
@@ -79,6 +114,7 @@ const HomeTabs = (props: Props) => {
         name="orders"
         component={Cart}
         options={{
+          title: "Cart",
           tabBarButton: ({ accessibilityState }) => {
             return (
               <TabBarButton
@@ -99,6 +135,7 @@ const HomeTabs = (props: Props) => {
         name="more"
         component={More}
         options={{
+          title: "More",
           tabBarButton: ({ accessibilityState }) => {
             return (
               <TabBarButton
