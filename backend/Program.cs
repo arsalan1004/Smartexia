@@ -1,16 +1,16 @@
 using ApiDependencies;
+using ApiDependencies.filters.authFiler;
 using backend.data;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Setting Environment Variables
-Environment.SetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS", "./smartexia-firebase-adminsdk.json");
+Environment.SetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS", @"./smartexia-firebase-adminsdk.json");
 
 
 // Add services to the container.
 builder.Services.AddApiDependencies();
-
 
 // Supabase-Postgres connection
 builder.Services.AddDbContext<smartexiaContext>(option =>
@@ -32,7 +32,7 @@ app.Use(async (context, next) =>
     var token = context.Session.GetString("token");
     if (!string.IsNullOrEmpty(token))
     {
-        context.Request.Headers.Add("Authorization", "Bearer " + token);
+        context.Request.Headers.Append("Authorization", "Bearer " + token);
     }
     await next();
 });
@@ -45,7 +45,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseRouting();
+app.UseAuthentication();
+app.UseAuthorization();
 app.MapControllers();
 
 app.Run();

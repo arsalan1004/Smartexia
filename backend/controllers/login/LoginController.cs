@@ -8,13 +8,13 @@ namespace backend.controllers.login;
 
 [ApiController]
 [Route("/api")]
-public class loginController: Controller
+public class LoginController: Controller
 {
     private readonly smartexiaContext _smartexiaContext;
     private readonly IHttpContextAccessor _httpContextAccessor;
     private readonly Authentication _firebaseAuth;
     
-    public loginController(smartexiaContext smartexiaContext, IHttpContextAccessor httpContextAccessor, Authentication firebaseAuth)
+    public LoginController(smartexiaContext smartexiaContext, IHttpContextAccessor httpContextAccessor, Authentication firebaseAuth)
     {
         _smartexiaContext = smartexiaContext;
         _httpContextAccessor = httpContextAccessor;
@@ -22,7 +22,7 @@ public class loginController: Controller
     }
     
     [HttpPost, Route("/login")]
-    public async Task<IActionResult> loginUser([FromBody] logindto logindto)
+    public async Task<IActionResult> LoginUser([FromBody] logindto logindto)
     {
         try
         {
@@ -33,6 +33,15 @@ public class loginController: Controller
                 var token = await _firebaseAuth.Login(logindto.email, logindto.password);
 
                 if (token is null) return Unauthorized(new{message="Incorrect email or password", status=401});
+                
+                var decodedToken = await FirebaseAdmin.Auth.FirebaseAuth.DefaultInstance
+                    .VerifyIdTokenAsync(token);
+                if (decodedToken is not null)
+                {
+                    Console.WriteLine("token is decoded successfully");
+                    Console.WriteLine(decodedToken.Issuer);
+                }
+                
                 _httpContextAccessor.HttpContext?.Session.SetString("token", token);
                 return Ok(new {message="Login successful", status=200});
             }

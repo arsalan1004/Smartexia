@@ -1,4 +1,5 @@
 using ApiDependencies.authentication;
+using ApiDependencies.filters.authFiler;
 using Firebase.Auth;
 using Firebase.Auth.Providers;
 using FirebaseAdmin;
@@ -64,6 +65,11 @@ namespace ApiDependencies
                     };
                 });
             service.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            return service;
+        }
+        private static IServiceCollection AddFilterServices(this IServiceCollection service)
+        {
+            service.AddScoped<TokenAuthenticationFilter>();
             return service;
         }
     }

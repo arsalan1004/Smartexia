@@ -4,7 +4,6 @@ using Supabase.Postgrest.Attributes;
 
 namespace backend.models.user;
 
-[Table("User")]
 public class User
 {
     [PrimaryKey("id")]

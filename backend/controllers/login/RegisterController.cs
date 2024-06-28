@@ -2,6 +2,7 @@ using ApiDependencies.authentication;
 using backend.data;
 using backend.DTOs.userDto;
 using backend.models.user;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -9,13 +10,13 @@ namespace backend.controllers.login;
 
 [ApiController]
 [Route("/api")]
-public class registerController: Controller
+public class RegisterController: Controller
 {
     private readonly smartexiaContext _smartexiaContext;
     private readonly IHttpContextAccessor _httpContextAccessor;
     private readonly Authentication _firebaseAuth;
     
-    public registerController(smartexiaContext smartexiaContext, IHttpContextAccessor httpContextAccessor, Authentication firebaseAuth)
+    public RegisterController(smartexiaContext smartexiaContext, IHttpContextAccessor httpContextAccessor, Authentication firebaseAuth)
     {
         _smartexiaContext = smartexiaContext;
         _httpContextAccessor = httpContextAccessor;
@@ -23,7 +24,7 @@ public class registerController: Controller
     }
     
     [HttpPost, Route("/register")]
-    public async Task<IActionResult> registerUser([FromBody] registerdto registerdto)
+    public async Task<IActionResult> RegisterUser([FromBody] registerdto registerdto)
     {
         try
         {
