@@ -13,7 +13,7 @@ builder.Services.AddApiDependencies();
 
 
 // Supabase-Postgres connection
-builder.Services.AddDbContext<supabaseContext>(option =>
+builder.Services.AddDbContext<smartexiaContext>(option =>
     option.UseNpgsql(Environment.GetEnvironmentVariable("DbConnectionString")));
 
 builder.Services.AddControllers();

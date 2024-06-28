@@ -12,7 +12,7 @@ public class Authentication : IAuthentication
     }
     
     // FIREBASE SIGNUP
-    public async Task<string?> Signup(string email, string password)
+    public async Task<string?> Register(string email, string password)
     {
         var userCredentials = await _firebaseAuthClient.CreateUserWithEmailAndPasswordAsync(email, password);
 

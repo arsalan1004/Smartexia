@@ -4,9 +4,9 @@ using User = backend.models.user.User;
 
 namespace backend.data;
 
-public class supabaseContext: DbContext
+public class smartexiaContext: DbContext
 {
-    public supabaseContext(DbContextOptions<supabaseContext> options): base(options)
+    public smartexiaContext(DbContextOptions<smartexiaContext> options): base(options)
     {
     }
     public DbSet<User> User { get; set; }
