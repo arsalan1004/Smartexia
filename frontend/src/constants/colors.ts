@@ -4,6 +4,7 @@ const COLORS = {
   bgPrimary: "#F2F7F5",
   bgSecondary: "#F8FDFB",
   fgPrimary: "#00473E",
+  fgPrimaryLight: "#AFCCC8",
   textPrimary: "#475D5B",
   accent: "#FAAE2B",
   secondary: "#FFA8BA",
