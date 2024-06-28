@@ -1,0 +1,6 @@
+<resources>
+  <color name="splashscreen_background">#00473E</color>
+  <color name="iconBackground">#00473E</color>
+  <color name="colorPrimary">#023c69</color>
+  <color name="colorPrimaryDark">#00473E</color>
+</resources>

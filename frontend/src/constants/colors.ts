@@ -36,29 +36,38 @@ const ON_BOARDING_TEXT: { [key: string]: OnBoardingTextType } = {
   },
 };
 
-const h1Oxygen: TextStyle = {
+export type CustomTextStyle = TextStyle & {
+  fontSize: number;
+  fontFamily: "Roboto" | "oxygen";
+  fontWeight: "bold" | "normal" | "semibold";
+};
+
+const h1Oxygen: CustomTextStyle = {
   fontSize: 24,
   fontWeight: "bold",
   fontFamily: "oxygen",
 };
-const h5Oxygen: TextStyle = {
+const h5Oxygen: CustomTextStyle = {
   fontSize: 16,
   fontWeight: "bold",
   fontFamily: "oxygen",
 };
 
-const b1Roboto: TextStyle = {
+const b1Roboto: CustomTextStyle = {
   fontSize: 16,
   fontWeight: "semibold",
+  fontFamily: "Roboto",
 };
 
-const b2Roboto: TextStyle = {
+const b2Roboto: CustomTextStyle = {
   fontSize: 14,
   fontWeight: "semibold",
+  fontFamily: "Roboto",
 };
-const b3Roboto: TextStyle = {
+const b3Roboto: CustomTextStyle = {
   fontSize: 12,
-  fontWeight: "semibold",
+  fontFamily: "Roboto",
+  fontWeight: "normal",
 };
 export {
   COLORS,
