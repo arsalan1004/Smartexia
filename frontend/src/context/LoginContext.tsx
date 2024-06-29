@@ -19,7 +19,7 @@ export const LoginProvider = ({ children }: LoginContextProvider) => {
 
   const updateIsLoggedIn = (value: boolean) => {
     console.log("updateIsLoggedIn In Context", value);
-    setIsLoggedIn((isLoggedIn) => !isLoggedIn);
+    //setIsLoggedIn((isLoggedIn) => !isLoggedIn);
   };
 
   return (

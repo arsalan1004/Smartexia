@@ -13,7 +13,12 @@ import {
 import { makeRedirectUri } from "expo-auth-session";
 import { useAuthRequest } from "expo-auth-session/providers/google";
 
-import { GoogleAuthProvider, signInWithCredential } from "firebase/auth";
+import {
+  Auth,
+  GoogleAuthProvider,
+  OAuthCredential,
+  signInWithCredential,
+} from "firebase/auth";
 
 import { FIREBASE_AUTH } from "../../config/firebaseConfig";
 import { AuthProvider } from "../../context/AuthContext";
@@ -28,8 +33,10 @@ import { RegistrationFormFields } from "./Registration";
 import MaskPasswordButton from "../../components/UI/MaskPasswordButton";
 import SwitchScreen from "../../components/login/SwitchScreen";
 import { loginRegStyles } from "../../constants/SharedStyles";
+//import axios from "axios";
 
 // TODO
+
 /**
  * Add correct Validation Rules
  */
@@ -50,32 +57,31 @@ export type LoginFormFields = Pick<
   "email" | "password"
 >;
 
-export type GoogleLoginFields = Pick<RegistrationFormFields, "name" | "email">;
+export type GoogleLoginFields = {
+  name: string;
+  email: string;
+  token: string;
+};
 
 const Login = ({ navigation }: PropTypes) => {
+  const { updateIsLoggedIn, isLoggedIn } = useContext(LoginContext);
+
   const [postLoginData, { isError, isLoading, isSuccess }] =
     usePostLoginDataMutation();
+
   const [postGoogleLoginData] = usePostGoogleLoginDataMutation();
 
   const {
     control,
     handleSubmit,
-    formState: { errors, isSubmitting, isSubmitSuccessful },
-    setError,
-  } = useForm<LoginFormFields>({
-    defaultValues: {
-      // email: "Test@email.com",
-      // password: "1234567",
-    },
-  });
+    formState: { errors, isSubmitSuccessful },
+  } = useForm<LoginFormFields>({});
 
   const [isPasswordMasked, setIsPasswordMasked] = useState(true);
   const [isToastVisible, setIsToastVisible] = useState(false);
-  //const [user, setUser] = useState();
+  const [toastMessage, setToastMessage] = useState("");
 
-  const { updateIsLoggedIn, isLoggedIn } = useContext(LoginContext);
-
-  console.log("Is Logged In in Login.tsx", isLoggedIn);
+  console.log("Is Logged In in Login.tsx @86", isLoggedIn);
 
   const [request, response, promptAsync] = useAuthRequest({
     androidClientId:
@@ -89,72 +95,67 @@ const Login = ({ navigation }: PropTypes) => {
     }),
   });
 
-  //const [postLoginData] = usePostLoginDataMutation();
+  useEffect(() => {
+    if (
+      isSuccess === true ||
+      isError === true ||
+      response?.type === "success"
+    ) {
+      setIsToastVisible(true);
+    }
+  }, [isSuccess, isError, response]);
 
   useEffect(() => {
-    if (errors.root || isSubmitSuccessful) setIsToastVisible(true);
-  }, [errors.root, isSubmitSuccessful]);
+    const handleGoogleLogin = async (
+      firebaseAuth: Auth,
+      credential: OAuthCredential
+    ) => {
+      try {
+        const { user }: any = await signInWithCredential(
+          firebaseAuth,
+          credential
+        );
 
-  useEffect(() => {
-    console.log("response", response);
-    console.log("request", request);
+        console.log("googleResponse:User", user);
+
+        const googleData: GoogleLoginFields = {
+          email: user.email as string,
+          name: user.displayName as string,
+          token: user.accessToken as string,
+        };
+
+        postGoogleLoginData(googleData);
+        setToastMessage("Google Login Successful");
+        updateIsLoggedIn(true);
+        AsyncStorage.setItem("@isLoggedIn", "true");
+      } catch (error) {
+        setToastMessage("Error signing in with credential");
+      }
+    };
+
     if (response?.type === "success") {
       const { id_token } = response.params;
-      console.log("id_token", id_token);
       const credential = GoogleAuthProvider.credential(id_token);
-      console.log("credential", credential);
-      signInWithCredential(FIREBASE_AUTH, credential)
-        .then((userCredential) => {
-          const userData = userCredential.user;
-          console.log(userData);
-
-          const googleData: GoogleLoginFields = {
-            email: userData.email as string,
-            name: userData.displayName as string,
-          };
-
-          postGoogleLoginData(googleData);
-        })
-        .catch((error) => {
-          console.error("Error signing in with credential", error);
-        });
-      AsyncStorage.setItem("@isLoggedIn", "true");
-      updateIsLoggedIn(true);
+      handleGoogleLogin(FIREBASE_AUTH, credential);
     }
   }, [response]);
 
-  const onSubmit = async (data: LoginFormFields) => {
+  const onSubmit = async (dataFields: LoginFormFields) => {
     Keyboard.dismiss();
+
     try {
-      //const response = await postLoginData(data);
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-      //throw new Error();
-    } catch (error) {
-      setError("root", {
-        message: "Incorrect Password or Email",
-      });
-    } finally {
-      console.log(data);
+      const res = await postLoginData(dataFields).unwrap();
+      console.log("RESPONSE", res);
+      setToastMessage(res.message);
+      AsyncStorage.setItem("@isLoggedIn", "true");
       updateIsLoggedIn(true);
+    } catch (error: any) {
+      console.log("error", error);
+      setToastMessage(error.data.message ?? "An error occurred");
     }
-
-    const response = await postLoginData(data);
-    console.log(response);
-    // try {
-    //   const { message, status } = await postLoginData(data);
-
-    //   if(status === 404 || status === 401) {
-    //     setError("root", { message: message });
-    //   }
-    //   else if (status === 200) {
-    //     AsyncStorage.setItem("@isLoggedIn", "true");
-    //     updateIsLoggedIn(true);
-    //   }
-    // }
   };
+  console.log("Is Submit Succesfull @162", isSubmitSuccessful);
 
-  console.log("Is Submit Succesful", isSubmitSuccessful);
-  console.log("Root Erros", Boolean(errors.root));
   return (
     <AuthProvider value={{ promptAsync }}>
       <View style={loginRegStyles.container}>
@@ -201,7 +202,7 @@ const Login = ({ navigation }: PropTypes) => {
                 rules={{
                   required: "Password is required",
                   minLength: {
-                    value: 8,
+                    value: 2,
                     message: "Password must have at least 8 characters",
                   },
                 }}
@@ -240,7 +241,7 @@ const Login = ({ navigation }: PropTypes) => {
             title="LOG IN"
             onPressAction={handleSubmit(onSubmit)}
             disabled={errors.email && errors.password ? true : false}
-            isSubmitting={isSubmitting}
+            isSubmitting={isLoading}
             variant="primary"
           />
           <GoogleButton />
@@ -252,8 +253,10 @@ const Login = ({ navigation }: PropTypes) => {
 
           {isToastVisible && (
             <Toast
-              message="Incorrect Email or Password"
-              type={isSubmitSuccessful ? "success" : "error"}
+              message={toastMessage}
+              type={
+                isSuccess || response?.type === "success" ? "success" : "error"
+              }
               position="bottom"
               closeAction={() => setIsToastVisible(false)}
             />

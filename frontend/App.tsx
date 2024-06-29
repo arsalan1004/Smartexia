@@ -65,10 +65,11 @@ function App() {
         // load onBoardingComplete from AsyncStorage
 
         const isUserLoggedIn = await AsyncStorage.getItem("@isLoggedIn");
-
+        updateIsLoggedIn(false);
         if (isUserLoggedIn !== null) {
           console.log("User is Logged In");
-          updateIsLoggedIn(true);
+          //updateIsLoggedIn(true);
+          updateIsLoggedIn(false);
           setOnBoardingComplete("true");
           console.log(isUserLoggedIn);
         } else {
