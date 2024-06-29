@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 namespace backend.controllers.login;
 
 [ApiController]
-[Route("/api")]
+
 public class LoginController: Controller
 {
     private readonly smartexiaContext _smartexiaContext;
@@ -31,8 +31,9 @@ public class LoginController: Controller
             if (user is not null)
             {
                 var token = await _firebaseAuth.Login(logindto.email, logindto.password);
-
-                if (token is null) return Unauthorized(new{message="Incorrect email or password", status=401});
+                Console.WriteLine("Tokenis");
+                Console.WriteLine(token);
+                if (token is "Incorrect Email or Password") return Unauthorized(new{message="Incorrect email or password", status=401});
                 
                 var decodedToken = await FirebaseAdmin.Auth.FirebaseAuth.DefaultInstance
                     .VerifyIdTokenAsync(token);

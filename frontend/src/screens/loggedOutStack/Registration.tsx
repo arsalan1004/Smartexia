@@ -1,5 +1,5 @@
 import { View, Text, StyleSheet, TextInput, Keyboard } from "react-native";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 
 import { loginRegStyles } from "../../constants/SharedStyles";
 import { Controller, useForm } from "react-hook-form";
@@ -12,6 +12,7 @@ import { RootLoggedOutStackParamList } from "../../../App";
 import SwitchScreen from "../../components/login/SwitchScreen";
 import { usePostRegDataMutation } from "../../features/loginReg/RegDataApi";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import LoginContext from "../../context/LoginContext";
 
 type RegistrationScreenNavigationProp = NativeStackNavigationProp<
   RootLoggedOutStackParamList,
@@ -35,56 +36,43 @@ export type RegistrationFormFields = {
 };
 
 const Registration = ({ navigation }: PropTypes) => {
+  const { updateIsLoggedIn, isLoggedIn } = useContext(LoginContext);
+
   const [postRegData, { isLoading, isSuccess, isError }] =
     usePostRegDataMutation();
 
   const {
     control,
     handleSubmit,
-    formState: { errors, isSubmitting, isSubmitSuccessful },
-    setError,
+    formState: { errors },
     watch,
-  } = useForm<RegistrationFormFields>({
-    defaultValues: {
-      // email: "Test@email.com",
-      // password: "1234567",
-    },
-  });
+  } = useForm<RegistrationFormFields>({});
 
   useEffect(() => {
-    if (errors.root || isSubmitSuccessful) setIsToastVisible(true);
-  }, [errors.root, isSubmitSuccessful]);
+    if (isSuccess == true || isError == true) {
+      setIsToastVisible(true);
+    }
+  }, [isSuccess, isError]);
 
   const password = watch("password");
 
   const [isPasswordMasked, setIsPasswordMasked] = useState(true);
   const [isToastVisible, setIsToastVisible] = useState(false);
+  const [toastMessage, setToastMessage] = useState("");
 
-  const onSubmit = async (data: RegistrationFormFields) => {
+  const onSubmit = async (dataFields: RegistrationFormFields) => {
     Keyboard.dismiss();
+
     try {
-      //const response = await postLoginData(data);
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-      throw new Error();
-    } catch (error) {
-      // setError("root", {
-      //   message: "Incorrect Password or Email",
-      // });
-    } finally {
-      console.log(data);
-      //updateIsLoggedIn(true);
+      const res = await postRegData(dataFields).unwrap();
+      console.log("RESPONSE", res);
+      setToastMessage(res.message);
+      updateIsLoggedIn(true);
+      AsyncStorage.setItem("isLoggedIn", "true");
+    } catch (error: any) {
+      console.log("error", error);
+      setToastMessage(error.data.message ?? "An error occurred");
     }
-
-    const response = await postRegData(data);
-
-    console.log("registration", response);
-    // if(status === 404 || status === 401) {
-    //   setError("root", { message: message });
-    // }
-    // else if (status === 200) {
-    //   AsyncStorage.setItem("@isLoggedIn", "true");
-    //   updateIsLoggedIn(true);
-    // }
   };
 
   return (
@@ -225,7 +213,7 @@ const Registration = ({ navigation }: PropTypes) => {
             title="REGISTER"
             onPressAction={handleSubmit(onSubmit)}
             disabled={errors.email && errors.password ? true : false}
-            isSubmitting={isSubmitting}
+            isSubmitting={isLoading}
             variant="primary"
           />
         </View>
@@ -237,8 +225,8 @@ const Registration = ({ navigation }: PropTypes) => {
 
         {isToastVisible && (
           <Toast
-            message="Incorrect Email or Password"
-            type={isSubmitSuccessful ? "success" : "error"}
+            message={toastMessage}
+            type={isSuccess ? "success" : "error"}
             position="bottom"
             closeAction={() => setIsToastVisible(false)}
           />

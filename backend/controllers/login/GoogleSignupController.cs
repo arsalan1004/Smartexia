@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore;
 namespace backend.controllers.login;
 
 [ApiController]
-[Route("/api")]
+
 public class GoogleSignupController:Controller
 {
     private readonly smartexiaContext _smartexiaContext;

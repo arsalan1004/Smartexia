@@ -72,5 +72,6 @@ namespace ApiDependencies
             service.AddScoped<TokenAuthenticationFilter>();
             return service;
         }
+       
     }
 }

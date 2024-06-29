@@ -5,6 +5,17 @@ using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// var  MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
+
+// builder.Services.AddCors(options =>
+// {
+//     options.AddPolicy(name: MyAllowSpecificOrigins,
+//       policy  =>
+//       {
+//           policy.WithOrigins("http://localhost:8081", "http://192.168.2.100:8081", "http://192.168.2.1:8081");
+//       });
+// });
+
 // Setting Environment Variables
 Environment.SetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS", @"./smartexia-firebase-adminsdk.json");
 
@@ -15,7 +26,7 @@ builder.Services.AddApiDependencies();
 // Supabase-Postgres connection
 builder.Services.AddDbContext<smartexiaContext>(option =>
     option.UseNpgsql(Environment.GetEnvironmentVariable("DbConnectionString")));
-
+ 
 builder.Services.AddControllers();
 builder.Services.AddDataProtection();
 // Add services to the container.
@@ -44,7 +55,11 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-
+app.UseRouting();
+app.UseCors(builder => builder
+    .AllowAnyOrigin()
+    .AllowAnyMethod()
+    .AllowAnyHeader());
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();

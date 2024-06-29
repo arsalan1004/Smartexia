@@ -6,20 +6,33 @@ import {
 
 // TODO: Return type of LoginPostData
 
+type ResponseType = {
+  status: number;
+  message: string;
+};
+
 export const loginDataApi = createApi({
   reducerPath: "loginDataApi",
-  baseQuery: fetchBaseQuery({ baseUrl: "http://localhost:5000" }),
+  baseQuery: fetchBaseQuery({
+    baseUrl: "http://192.168.2.100:5022",
+    prepareHeaders: (headers) => {
+      // Set the Content-Type header to application/json
+      headers.set("Content-Type", "application/json");
+      return headers;
+    },
+  }),
   endpoints: (builder) => ({
     postLoginData: builder.mutation({
       query: (data: LoginFormFields) => ({
         url: "/login",
         method: "POST",
         body: data,
+        //credentials: "same-origin",
       }),
     }),
     postGoogleLoginData: builder.mutation({
       query: (data: GoogleLoginFields) => ({
-        url: "/login/google",
+        url: "/googleSignup",
         method: "POST",
         body: data,
       }),

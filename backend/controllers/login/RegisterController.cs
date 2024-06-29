@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore;
 namespace backend.controllers.login;
 
 [ApiController]
-[Route("/api")]
+
 public class RegisterController: Controller
 {
     private readonly smartexiaContext _smartexiaContext;

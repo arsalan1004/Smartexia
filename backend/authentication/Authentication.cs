@@ -22,9 +22,14 @@ public class Authentication : IAuthentication
     // FIREBASE LOGIN
     public async Task<string?> Login(string email, string password)
     {
-        var userCredentials = await _firebaseAuthClient.SignInWithEmailAndPasswordAsync(email, password);
-        Console.WriteLine(userCredentials);
-        return userCredentials is null ? null : await userCredentials.User.GetIdTokenAsync();
+        try {
+          var userCredentials = await _firebaseAuthClient.SignInWithEmailAndPasswordAsync(email, password);
+          
+          return userCredentials is null ? null : await userCredentials.User.GetIdTokenAsync();
+        } catch (Exception e) {
+          var response =  "Incorrect Email or Password";
+          return response;
+        }
     }
 
     // FIREBASE LOGOUT
