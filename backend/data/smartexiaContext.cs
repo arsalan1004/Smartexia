@@ -1,4 +1,6 @@
 using backend.models.brand;
+using backend.models.cart;
+using backend.models.cartItem;
 using backend.models.category;
 using backend.models.hub;
 using backend.models.operatingSystem;
@@ -19,4 +21,7 @@ public class smartexiaContext: DbContext
     public DbSet<operatingSystem> OperatingSystem { get; set; }
     public DbSet<product> Product { get; set; }
     public DbSet<hub> Hub { get; set; }
+    
+    public DbSet<cart> Cart { get; set; }
+    public DbSet<cartItem> CartItem { get; set; }
 }
