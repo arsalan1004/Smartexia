@@ -20,6 +20,8 @@ import Search from "./src/screens/loggedInStack/homeTabs/Search";
 import Cart from "./src/screens/loggedInStack/homeTabs/Cart";
 import More from "./src/screens/loggedInStack/homeTabs/More";
 import HomeTabs from "./src/navigation/HomeTabs";
+import ProductGridScreen from "./src/screens/loggedInStack/ProductGridScreen";
+import { ProductType } from "./src/features/products/HomeProductSlice";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -32,6 +34,10 @@ export type RootLoggedOutStackParamList = {
 
 export type RootLoggedInStackParamList = {
   homestack: undefined;
+  productGridScreen: {
+    listData?: ProductType[];
+    title: string;
+  };
 };
 
 // export type RootHomeTabsParamList = {
@@ -44,7 +50,7 @@ export type RootLoggedInStackParamList = {
 const loggedOutStack =
   createNativeStackNavigator<RootLoggedOutStackParamList>();
 
-const loggedInStack = createNativeStackNavigator();
+const loggedInStack = createNativeStackNavigator<RootLoggedInStackParamList>();
 
 //const HomeBottomTab = createBottomTabNavigator<RootHomeTabsParamList>();
 
@@ -162,11 +168,23 @@ function App() {
   };
   const LoggedInStack = () => {
     return (
-      <loggedInStack.Navigator>
+      <loggedInStack.Navigator
+        screenOptions={{
+          headerStyle: {
+            backgroundColor: COLORS.bgPrimary,
+            //borderBottomColor: COLORS.fgPrimary,
+          },
+        }}
+      >
         <loggedInStack.Screen
           name="homestack"
           component={HomeTabs}
           options={{ headerShown: false }}
+        />
+        <loggedInStack.Screen
+          name="productGridScreen"
+          component={ProductGridScreen}
+          options={({ route }) => ({ title: route.params.title })}
         />
       </loggedInStack.Navigator>
     );
@@ -189,7 +207,7 @@ function App() {
               dotSelected === 2 ? compeleteOnBoarding : incrementDotSelected
             }
           />
-        ) : isLoggedIn ? (
+        ) : true ? (
           <LoggedInStack />
         ) : (
           <LoggedOutStack />

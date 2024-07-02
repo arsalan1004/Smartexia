@@ -5,6 +5,7 @@ const COLORS = {
   bgSecondary: "#F8FDFB",
   fgPrimary: "#00473E",
   fgPrimaryLight: "#AFCCC8",
+  fgPrimaryLight2: "#E3F1EC",
   textPrimary: "#475D5B",
   accent: "#FAAE2B",
   secondary: "#FFA8BA",
@@ -48,6 +49,12 @@ const h1Oxygen: CustomTextStyle = {
   fontWeight: "bold",
   fontFamily: "oxygen",
 };
+
+const h4Oxygen: CustomTextStyle = {
+  fontSize: 18,
+  fontWeight: "normal",
+  fontFamily: "oxygen",
+};
 const h5Oxygen: CustomTextStyle = {
   fontSize: 16,
   fontWeight: "bold",
@@ -73,6 +80,7 @@ const b3Roboto: CustomTextStyle = {
 export {
   COLORS,
   h1Oxygen,
+  h4Oxygen,
   h5Oxygen,
   b1Roboto,
   b2Roboto,
