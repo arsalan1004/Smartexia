@@ -17,6 +17,7 @@ namespace ApiDependencies
             service.AddSessionServices();
             service.AddFirebaseServices();
             service.AddAuthenticationServices();
+            service.AddFilterServices();
             return service;
         }
 

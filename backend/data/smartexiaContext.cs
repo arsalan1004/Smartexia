@@ -1,3 +1,4 @@
+using backend.models.category;
 using Microsoft.EntityFrameworkCore;
 using Supabase.Gotrue;
 using User = backend.models.user.User;
@@ -10,4 +11,5 @@ public class smartexiaContext: DbContext
     {
     }
     public DbSet<User> User { get; set; }
+    public DbSet<Category> Category { get; set; }
 }
