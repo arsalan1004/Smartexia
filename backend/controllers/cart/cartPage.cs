@@ -33,6 +33,7 @@ public class cartPage:Controller
                     userId = cartdto.userId
                 };
                 _smartexiaContext.Cart.Add(newcart);
+                await _smartexiaContext.SaveChangesAsync();
                 userCart =  _smartexiaContext.Cart.FirstOrDefault(x => x.userId == cartdto.userId);
             }
             cartItem item = new cartItem {
@@ -64,10 +65,10 @@ public class cartPage:Controller
             
             var cartItems = await _smartexiaContext.CartItem.Where(x => x.cartId == userCart.id).Include(x=>x.product).Select(item => new
             {
-                id = item.id,
-                name = item.product.name,
-                price = item.product.price,
-                quantity = item.quantity,
+                productId = item.id,
+                productName = item.product.name,
+                productPrice = item.product.price,
+                productQuantity = item.quantity,
                 image = item.product.imageUrl
             }).ToListAsync();
             
