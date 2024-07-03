@@ -9,11 +9,11 @@ using Microsoft.EntityFrameworkCore;
 namespace backend.controllers.cart;
 
 [ApiController]
-public class cartPage:Controller
+public class CartPage:Controller
 {
     private readonly smartexiaContext _smartexiaContext;
     
-    public cartPage(smartexiaContext smartexiaContext)
+    public CartPage(smartexiaContext smartexiaContext)
     {
         _smartexiaContext = smartexiaContext;
     }
