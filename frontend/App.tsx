@@ -15,7 +15,13 @@ import { Provider } from "react-redux";
 import store from "./store";
 import LoginContext, { LoginProvider } from "./src/context/LoginContext";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import Home from "./src/screens/loggedInStack/Home";
+import Home from "./src/screens/loggedInStack/homeTabs/Home";
+import Search from "./src/screens/loggedInStack/homeTabs/Search";
+import Cart from "./src/screens/loggedInStack/homeTabs/Cart";
+import More from "./src/screens/loggedInStack/homeTabs/More";
+import HomeTabs from "./src/navigation/HomeTabs";
+import ProductGridScreen from "./src/screens/loggedInStack/ProductGridScreen";
+import { ProductType } from "./src/features/products/HomeProductSlice";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -27,13 +33,27 @@ export type RootLoggedOutStackParamList = {
 };
 
 export type RootLoggedInStackParamList = {
-  home: undefined;
+  homestack: undefined;
+  productGridScreen: {
+    listData?: ProductType[];
+    title: string;
+    categoryId?: string;
+  };
 };
+
+// export type RootHomeTabsParamList = {
+//   home: undefined;
+//   search: undefined;
+//   orders: undefined;
+//   more: undefined;
+// };
 
 const loggedOutStack =
   createNativeStackNavigator<RootLoggedOutStackParamList>();
 
-const loggedInStack = createBottomTabNavigator();
+const loggedInStack = createNativeStackNavigator<RootLoggedInStackParamList>();
+
+//const HomeBottomTab = createBottomTabNavigator<RootHomeTabsParamList>();
 
 function App() {
   // const [fontsLoaded, fontError] = useFonts({
@@ -123,6 +143,17 @@ function App() {
     },
   };
 
+  // function HomeTabs() {
+  //   return (
+  //     <HomeBottomTab.Navigator>
+  //       <HomeBottomTab.Screen name="home" component={Home} />
+  //       <HomeBottomTab.Screen name="search" component={Search} />
+  //       <HomeBottomTab.Screen name="orders" component={Cart} />
+  //       <HomeBottomTab.Screen name="more" component={More} />
+  //     </HomeBottomTab.Navigator>
+  //   );
+  // }
+
   const LoggedOutStack = () => {
     return (
       <loggedOutStack.Navigator
@@ -138,8 +169,24 @@ function App() {
   };
   const LoggedInStack = () => {
     return (
-      <loggedInStack.Navigator>
-        <loggedInStack.Screen name="home" component={Home} />
+      <loggedInStack.Navigator
+        screenOptions={{
+          headerStyle: {
+            backgroundColor: COLORS.bgPrimary,
+            //borderBottomColor: COLORS.fgPrimary,
+          },
+        }}
+      >
+        <loggedInStack.Screen
+          name="homestack"
+          component={HomeTabs}
+          options={{ headerShown: false }}
+        />
+        <loggedInStack.Screen
+          name="productGridScreen"
+          component={ProductGridScreen}
+          options={({ route }) => ({ title: route.params.title })}
+        />
       </loggedInStack.Navigator>
     );
   };
@@ -161,7 +208,7 @@ function App() {
               dotSelected === 2 ? compeleteOnBoarding : incrementDotSelected
             }
           />
-        ) : isLoggedIn ? (
+        ) : true ? (
           <LoggedInStack />
         ) : (
           <LoggedOutStack />

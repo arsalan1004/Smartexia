@@ -3,14 +3,14 @@ import React from "react";
 
 type Props = {};
 
-const Home = (props: Props) => {
+const Search = (props: Props) => {
   return (
     <View>
-      <Text>Home</Text>
+      <Text>Search</Text>
     </View>
   );
 };
 
-export default Home;
+export default Search;
 
 const styles = StyleSheet.create({});
