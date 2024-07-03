@@ -37,6 +37,7 @@ export type RootLoggedInStackParamList = {
   productGridScreen: {
     listData?: ProductType[];
     title: string;
+    categoryId?: string;
   };
 };
 

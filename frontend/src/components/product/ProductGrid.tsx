@@ -9,9 +9,13 @@ import {
 import React from "react";
 import { ProductType } from "../../features/products/HomeProductSlice";
 import ProductItem from "../home/ProductItem";
+import { CategoryProductType } from "../../features/categoryProducts/CategoryProductsApi";
+
+type listType = ProductType | CategoryProductType;
+type listArrayType = ProductType[] | CategoryProductType[];
 
 type PropTypes = {
-  listData: ProductType[];
+  listData: listArrayType;
 };
 
 const ProductGrid = ({ listData }: PropTypes) => {
@@ -19,7 +23,7 @@ const ProductGrid = ({ listData }: PropTypes) => {
     <View style={styles.containerStyles}>
       <FlatList
         data={listData}
-        renderItem={({ item }: ListRenderItemInfo<ProductType>) => (
+        renderItem={({ item }: ListRenderItemInfo<listType>) => (
           <ProductItem
             imageUrl={item.imageUrl}
             name={item.name}
@@ -29,7 +33,7 @@ const ProductGrid = ({ listData }: PropTypes) => {
             applyWidth={false}
           />
         )}
-        keyExtractor={(item: ProductType) => item.id}
+        keyExtractor={(item: listType) => item.id}
         numColumns={2}
         showsHorizontalScrollIndicator={false}
         contentContainerStyle={{ gap: 20 }}

@@ -26,6 +26,7 @@ import { useGetHomeProductsQuery } from "../../../features/products/HomeProductA
 import { useSelector } from "react-redux";
 import { RootState } from "../../../../store";
 import { RootLoggedInStackParamList } from "../../../../App";
+import { useGetCategoriesQuery } from "../../../features/category/CategoryApi";
 
 type HomeScreenNavigationProp = BottomTabNavigationProp<
   RootHomeTabsParamList & {
@@ -56,6 +57,7 @@ const Home = ({ navigation }: Props) => {
   // const { data: featuredProducts } = useGetHomeProductsQuery("featured");
   // const { data: newArrivedProducts } = useGetHomeProductsQuery("newArrived");
   // const { data: bestSellingProducts } = useGetHomeProductsQuery("bestSelling");
+  // const { data: categoryList } = useGetCategoriesQuery();
 
   const discountedProducts = useSelector(
     (state: RootState) => state.homeProduct.discounted
@@ -105,6 +107,16 @@ const Home = ({ navigation }: Props) => {
     }
   };
 
+  const navigateToCategoryProducts = (
+    categoryId: string,
+    screenTitle: string
+  ) => {
+    navigation.navigate("productGridScreen", {
+      categoryId: categoryId,
+      title: screenTitle,
+    });
+  };
+
   return (
     <ScrollView style={{ flex: 1 }}>
       <View style={styles.container}>
@@ -133,6 +145,21 @@ const Home = ({ navigation }: Props) => {
           style={styles.listStyle}
         />
 
+        {/* <FlatList
+          data={categoryList}
+          renderItem={({ item, index }) => (
+            <CategoryButton
+              Icon={iconsData[index].Icon}
+              label={iconsData[index].label}
+              onPressAction={() => navigateToCategoryProducts(item.id, item.name)}
+            />
+          )}
+          keyExtractor={(item) => item.id}
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          ItemSeparatorComponent={() => <View style={{ width: 30 }} />}
+          style={styles.listStyle}
+        /> */}
         <HomeProductsViewAll
           heading="Discounted Products"
           onPressAction={() => navigateTo("Discounted Products")}
