@@ -5,11 +5,11 @@ using Microsoft.EntityFrameworkCore;
 namespace backend.controllers.categoryproducts;
 
 [ApiController]
-public class categoryProducts:Controller
+public class CategoryProducts:Controller
 {
     private readonly smartexiaContext _smartexiaContext;
     
-    public categoryProducts(smartexiaContext smartexiaContext)
+    public CategoryProducts(smartexiaContext smartexiaContext)
     {
         _smartexiaContext = smartexiaContext;
     }
