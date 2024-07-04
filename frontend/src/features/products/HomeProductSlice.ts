@@ -34,26 +34,37 @@ export {
   kitchenFilters,
   laundryFilters,
 };
-
-export type SubCategory =
+export type SmartLighting =
   | "Smart Bulb"
   | "Smart Light Strip"
   | "Smart Light Switch"
-  | "Smart Lamp"
+  | "Smart Lamp";
+
+export type SmartSecurity =
   | "Smart Camera"
   | "Smart Doorbell"
   | "Smart Lock"
-  | "Smart Alarm"
+  | "Smart Alarm";
+
+export type SmartClimate =
   | "Smart Thermostat"
   | "Smart Humidifier"
-  | "Smart Dehumidifier"
+  | "Smart Dehumidifier";
+
+export type SmartKitchen =
   | "Smart Fridge"
   | "Smart Oven"
   | "Smart Cooktop"
-  | "Smart Microwave"
-  | "Smart Washer"
-  | "Smart Dryer"
-  | "Smart Iron";
+  | "Smart Microwave";
+
+export type SmartLaundary = "Smart Washer" | "Smart Dryer" | "Smart Iron";
+
+export type SubCategory =
+  | SmartLighting
+  | SmartSecurity
+  | SmartClimate
+  | SmartKitchen
+  | SmartLaundary;
 
 export type Brand =
   | "Samsung"

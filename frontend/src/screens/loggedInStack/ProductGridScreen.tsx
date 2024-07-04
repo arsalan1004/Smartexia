@@ -10,6 +10,7 @@ import {
   CategoryProductType,
   useGetCategoryProductsMutation,
 } from "../../features/categoryProducts/CategoryProductsApi";
+import { useGetSearchedProductsMutation } from "../../features/searchProductResults/SearchResultsApi";
 
 type ProductGridRouteProp = RouteProp<
   RootLoggedInStackParamList,
@@ -25,6 +26,7 @@ type PropTypes = {
 
 const ProductGridScreen = ({ route }: PropTypes) => {
   const [getCategories, { isLoading }] = useGetCategoryProductsMutation();
+
   const [categoryProducts, setCategoryProducts] =
     useState<CategoryProductType[]>();
 

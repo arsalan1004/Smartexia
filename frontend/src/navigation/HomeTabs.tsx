@@ -45,6 +45,7 @@ const screenOpt = {
     borderBottomWidth: 1,
     //borderBottomColor: COLORS.fgPrimary,
   },
+  tabBarHideOnKeyboard: true,
   headerTintColor: COLORS.fgPrimary,
 };
 
