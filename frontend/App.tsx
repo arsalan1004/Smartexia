@@ -1,4 +1,4 @@
-import { StatusBar, StyleSheet } from "react-native";
+import { Pressable, StatusBar, StyleSheet } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { COLORS, ON_BOARDING_TEXT } from "./src/constants/colors";
 import * as SplashScreen from "expo-splash-screen";
@@ -10,17 +10,19 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import Login from "./src/screens/loggedOutStack/Login";
 import Registration from "./src/screens/loggedOutStack/Registration";
 import { NavigationContainer, DefaultTheme } from "@react-navigation/native";
-import { useFonts } from "expo-font";
 import { Provider } from "react-redux";
 import store from "./store";
 import LoginContext, { LoginProvider } from "./src/context/LoginContext";
-import HomeTabs from "./src/navigation/HomeTabs";
-import ProductGridScreen from "./src/screens/loggedInStack/ProductGridScreen";
-import { ProductType } from "./src/features/products/HomeProductSlice";
-import SearchProductGridScreen from "./src/screens/loggedInStack/homeTabs/SearchProductGridScreen";
-import FilterScreen from "./src/screens/loggedInStack/FilterScreen";
-import SubFilterScreen from "./src/screens/loggedInStack/SubFilterScreen";
-import { Filters } from "./src/features/search/SearchProductSlice";
+// import HomeTabs from "./src/navigation/HomeTabs";
+// import ProductGridScreen from "./src/screens/loggedInStack/ProductGridScreen";
+// import { ProductType } from "./src/features/products/HomeProductSlice";
+// import SearchProductGridScreen from "./src/screens/loggedInStack/homeTabs/SearchProductGridScreen";
+// import FilterScreen from "./src/screens/loggedInStack/FilterScreen";
+// import SubFilterScreen from "./src/screens/loggedInStack/SubFilterScreen";
+// import { Filters } from "./src/features/search/SearchProductSlice";
+// import ProductDetailScreen from "./src/screens/loggedInStack/ProductDetailScreen";
+// import Ionicons from "@expo/vector-icons/Ionicons";
+import LoggedInStack from "./src/navigation/LoggedInStack";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -31,25 +33,28 @@ export type RootLoggedOutStackParamList = {
   registration: undefined;
 };
 
-export type RootLoggedInStackParamList = {
-  homestack: undefined;
-  productGridScreen: {
-    listData?: ProductType[];
-    title: string;
-    categoryId?: string;
-    // searchQuery?: string;
-  };
-  searchProductGridScreen: {
-    title: string;
-    searchQuery: string;
-  };
-  searchFilters: {
-    searchQuery: string;
-  };
-  searchSubFilters: {
-    title: keyof Filters;
-  };
-};
+// export type RootLoggedInStackParamList = {
+//   homestack: undefined;
+//   productGridScreen: {
+//     listData?: ProductType[];
+//     title: string;
+//     categoryId?: string;
+//     // searchQuery?: string;
+//   };
+//   searchProductGridScreen: {
+//     title: string;
+//     searchQuery: string;
+//   };
+//   searchFilters: {
+//     searchQuery: string;
+//   };
+//   searchSubFilters: {
+//     title: keyof Filters;
+//   };
+//   productDetail: {
+//     productId: string;
+//   };
+// };
 
 // export type RootHomeTabsParamList = {
 //   home: undefined;
@@ -61,7 +66,7 @@ export type RootLoggedInStackParamList = {
 const loggedOutStack =
   createNativeStackNavigator<RootLoggedOutStackParamList>();
 
-const loggedInStack = createNativeStackNavigator<RootLoggedInStackParamList>();
+// const loggedInStack = createNativeStackNavigator<RootLoggedInStackParamList>();
 
 //const HomeBottomTab = createBottomTabNavigator<RootHomeTabsParamList>();
 
@@ -177,45 +182,65 @@ function App() {
       </loggedOutStack.Navigator>
     );
   };
-  const LoggedInStack = () => {
-    return (
-      <loggedInStack.Navigator
-        screenOptions={{
-          headerStyle: {
-            backgroundColor: COLORS.bgPrimary,
-            //borderBottomColor: COLORS.fgPrimary,
-          },
-          headerTintColor: COLORS.fgPrimary,
-        }}
-      >
-        <loggedInStack.Screen
-          name="homestack"
-          component={HomeTabs}
-          options={{ headerShown: false }}
-        />
-        <loggedInStack.Screen
-          name="productGridScreen"
-          component={ProductGridScreen}
-          options={({ route }) => ({ title: route.params.title })}
-        />
-        <loggedInStack.Screen
-          name="searchProductGridScreen"
-          component={SearchProductGridScreen}
-          options={({ route }) => ({ title: route.params.title })}
-        />
-        <loggedInStack.Screen
-          name="searchFilters"
-          component={FilterScreen}
-          options={{ title: "Filter By" }}
-        />
-        <loggedInStack.Screen
-          name="searchSubFilters"
-          component={SubFilterScreen}
-          options={({ route }) => ({ title: route.params.title })}
-        />
-      </loggedInStack.Navigator>
-    );
-  };
+  // const LoggedInStack = () => {
+  //   return (
+  //     <loggedInStack.Navigator
+  //       screenOptions={{
+  //         headerStyle: {
+  //           backgroundColor: COLORS.bgPrimary,
+  //           //borderBottomColor: COLORS.fgPrimary,
+  //         },
+  //         headerTintColor: COLORS.fgPrimary,
+  //       }}
+  //     >
+  //       <loggedInStack.Screen
+  //         name="homestack"
+  //         component={HomeTabs}
+  //         options={{ headerShown: false }}
+  //       />
+  //       <loggedInStack.Screen
+  //         name="productGridScreen"
+  //         component={ProductGridScreen}
+  //         options={({ route }) => ({ title: route.params.title })}
+  //       />
+  //       <loggedInStack.Screen
+  //         name="searchProductGridScreen"
+  //         component={SearchProductGridScreen}
+  //         options={({ route }) => ({ title: route.params.title })}
+  //       />
+  //       <loggedInStack.Screen
+  //         name="searchFilters"
+  //         component={FilterScreen}
+  //         options={{ title: "Filter By" }}
+  //       />
+  //       <loggedInStack.Screen
+  //         name="searchSubFilters"
+  //         component={SubFilterScreen}
+  //         options={({ route }) => ({ title: route.params.title })}
+  //       />
+  //       <loggedInStack.Screen
+  //         name="productDetail"
+  //         component={ProductDetailScreen}
+  //         options={{ title: "Product Detail",  headerRight: () => {
+  //           return (
+  //             <Pressable
+  //               style={{ marginRight: 10 }}
+  //               onPress={() => navigation.navigate("orders")}
+  //             >
+  //               <Ionicons
+  //                 name="cart-outline"
+  //                 size={30}
+  //                 color={COLORS.fgPrimary}
+  //               />
+  //             </Pressable>
+  //           );
+  //         },  }}
+
+  //       />
+
+  //     </loggedInStack.Navigator>
+  //   );
+  // };
 
   console.log("hello");
 

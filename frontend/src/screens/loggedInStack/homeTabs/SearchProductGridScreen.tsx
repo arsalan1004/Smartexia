@@ -11,7 +11,7 @@ import {
 } from "react-native";
 import React, { useCallback, useEffect, useState } from "react";
 import { RouteProp, useFocusEffect } from "@react-navigation/native";
-import { RootLoggedInStackParamList } from "../../../../App";
+import { RootLoggedInStackParamList } from "../../../navigation/LoggedInStack";
 import { useGetSearchedProductsMutation } from "../../../features/searchProductResults/SearchResultsApi";
 import TextButton from "../../../components/UI/TextButton";
 import { COLORS, b1Roboto } from "../../../constants/colors";
@@ -183,11 +183,11 @@ const SearchProductGridScreen = ({ route, navigation }: PropTypes) => {
         keyExtractor={(item) => item.id}
         renderItem={({ item }: ListRenderItemInfo<ProductType>) => (
           <ProductItem
+            productId={item.id}
             imageUrl={item.imageUrl}
             name={item.name}
             price={item.price}
             rating={item.rating}
-            onPressAction={() => {}}
             applyWidth={false}
           />
         )}

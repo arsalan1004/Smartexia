@@ -12,6 +12,8 @@ import { COLORS } from "../constants/colors";
 import { Ionicons } from "@expo/vector-icons";
 import { Pressable } from "react-native";
 import { useNavigation } from "@react-navigation/native";
+import HeaderCartButton from "../components/UI/HeaderCartButton";
+
 type Props = {};
 
 export type RootHomeTabsParamList = {
@@ -74,20 +76,11 @@ const HomeTabs = (props: Props) => {
               />
             );
           },
-          headerRight: () => {
-            return (
-              <Pressable
-                style={{ marginRight: 10 }}
-                onPress={() => navigation.navigate("orders")}
-              >
-                <Ionicons
-                  name="cart-outline"
-                  size={30}
-                  color={COLORS.fgPrimary}
-                />
-              </Pressable>
-            );
-          },
+          headerRight: () => (
+            <HeaderCartButton
+              onPressNavigate={() => navigation.navigate("orders")}
+            />
+          ),
         }}
       />
       <HomeBottomTab.Screen

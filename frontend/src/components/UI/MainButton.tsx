@@ -11,6 +11,7 @@ type PropTypes = {
   disabled?: boolean;
   bottomPosition?: number; // if -1 then don't stick
   widthPC?: number; // Width Percentage => number choosen instead of String for Proper Typing
+  paddingVertical?: number;
 };
 
 const MainButton = ({
@@ -21,6 +22,7 @@ const MainButton = ({
   disabled = false,
   bottomPosition = -1,
   widthPC = 100,
+  paddingVertical = 16,
 }: PropTypes) => {
   console.log("Main Button Disabled: ", disabled);
   console.log("Main Button isSubmitting: ", isSubmitting);
@@ -52,6 +54,7 @@ const MainButton = ({
         {
           width: `${widthPC}%`,
           backgroundColor: backgroundColor,
+          paddingVertical: paddingVertical,
           ...positionStyle,
         },
         pressed && styles.pressed,
@@ -74,7 +77,6 @@ export default MainButton;
 
 const styles = StyleSheet.create({
   button: {
-    paddingVertical: 16,
     borderRadius: 50,
     alignItems: "center",
     justifyContent: "center",

@@ -10,9 +10,13 @@ import React from "react";
 import PlusButton from "../UI/PlusButton";
 import { COLORS, b1Roboto, h5Oxygen } from "../../constants/colors";
 import Ionicons from "@expo/vector-icons/Ionicons";
+import { useNavigation } from "@react-navigation/native";
+import { NativeStackNavigationProp } from "react-native-screens/lib/typescript/native-stack/types";
+import { RootLoggedInStackParamList } from "../../navigation/LoggedInStack";
 // import WishlistButton from "../UI/WishlistButton";
 
 type PropTypes = {
+  productId: string;
   imageUrl: string;
   // isWhislisted: boolean; // From Global Wishlist Object
   name: string;
@@ -21,12 +25,13 @@ type PropTypes = {
   rating: number;
   widthPercent?: number;
   applyWidth: boolean;
-  onPressAction: () => void;
+  // onPressAction: () => void;
 };
 
 const screenWidth = Dimensions.get("window").width;
 
 const ProductItem = ({
+  productId,
   imageUrl,
   // isWhislisted,
   name,
@@ -35,10 +40,21 @@ const ProductItem = ({
   rating,
   applyWidth = false,
   widthPercent = 50,
-  onPressAction,
-}: PropTypes) => {
+}: // onPressAction,
+PropTypes) => {
+  const navigation =
+    useNavigation<
+      NativeStackNavigationProp<RootLoggedInStackParamList, "productDetail">
+    >();
+
+  const onPressHandler = () => {
+    console.log("Nav to Product Detail");
+    navigation.navigate("productDetail", { productId: productId });
+    console.log("Product ID: ", productId);
+  };
+
   return (
-    <Pressable onPress={onPressAction} style={[styles.container]}>
+    <Pressable onPress={onPressHandler} style={[styles.container]}>
       <View style={styles.imageContainer}>
         <Image
           style={styles.imageStyle}

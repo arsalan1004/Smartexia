@@ -13,7 +13,7 @@ import {
   RouteProp,
   useFocusEffect,
 } from "@react-navigation/native";
-import { RootLoggedInStackParamList } from "../../../App";
+import { RootLoggedInStackParamList } from "../../navigation/LoggedInStack";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { COLORS, h3Oxygen } from "../../constants/colors";
 import { useDispatch } from "react-redux";
