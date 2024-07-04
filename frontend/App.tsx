@@ -14,14 +14,13 @@ import { useFonts } from "expo-font";
 import { Provider } from "react-redux";
 import store from "./store";
 import LoginContext, { LoginProvider } from "./src/context/LoginContext";
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import Home from "./src/screens/loggedInStack/homeTabs/Home";
-import Search from "./src/screens/loggedInStack/homeTabs/Search";
-import Cart from "./src/screens/loggedInStack/homeTabs/Cart";
-import More from "./src/screens/loggedInStack/homeTabs/More";
 import HomeTabs from "./src/navigation/HomeTabs";
 import ProductGridScreen from "./src/screens/loggedInStack/ProductGridScreen";
 import { ProductType } from "./src/features/products/HomeProductSlice";
+import SearchProductGridScreen from "./src/screens/loggedInStack/homeTabs/SearchProductGridScreen";
+import FilterScreen from "./src/screens/loggedInStack/FilterScreen";
+import SubFilterScreen from "./src/screens/loggedInStack/SubFilterScreen";
+import { Filters } from "./src/features/search/SearchProductSlice";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -38,6 +37,17 @@ export type RootLoggedInStackParamList = {
     listData?: ProductType[];
     title: string;
     categoryId?: string;
+    // searchQuery?: string;
+  };
+  searchProductGridScreen: {
+    title: string;
+    searchQuery: string;
+  };
+  searchFilters: {
+    searchQuery: string;
+  };
+  searchSubFilters: {
+    title: keyof Filters;
   };
 };
 
@@ -175,6 +185,7 @@ function App() {
             backgroundColor: COLORS.bgPrimary,
             //borderBottomColor: COLORS.fgPrimary,
           },
+          headerTintColor: COLORS.fgPrimary,
         }}
       >
         <loggedInStack.Screen
@@ -185,6 +196,21 @@ function App() {
         <loggedInStack.Screen
           name="productGridScreen"
           component={ProductGridScreen}
+          options={({ route }) => ({ title: route.params.title })}
+        />
+        <loggedInStack.Screen
+          name="searchProductGridScreen"
+          component={SearchProductGridScreen}
+          options={({ route }) => ({ title: route.params.title })}
+        />
+        <loggedInStack.Screen
+          name="searchFilters"
+          component={FilterScreen}
+          options={{ title: "Filter By" }}
+        />
+        <loggedInStack.Screen
+          name="searchSubFilters"
+          component={SubFilterScreen}
           options={({ route }) => ({ title: route.params.title })}
         />
       </loggedInStack.Navigator>

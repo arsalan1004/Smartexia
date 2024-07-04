@@ -50,6 +50,17 @@ const h1Oxygen: CustomTextStyle = {
   fontFamily: "oxygen",
 };
 
+const h2Oxygen: CustomTextStyle = {
+  fontSize: 22,
+  fontWeight: "bold",
+  fontFamily: "oxygen",
+};
+const h3Oxygen: CustomTextStyle = {
+  fontSize: 20,
+  fontWeight: "bold",
+  fontFamily: "oxygen",
+};
+
 const h4Oxygen: CustomTextStyle = {
   fontSize: 18,
   fontWeight: "normal",
@@ -80,6 +91,8 @@ const b3Roboto: CustomTextStyle = {
 export {
   COLORS,
   h1Oxygen,
+  h2Oxygen,
+  h3Oxygen,
   h4Oxygen,
   h5Oxygen,
   b1Roboto,

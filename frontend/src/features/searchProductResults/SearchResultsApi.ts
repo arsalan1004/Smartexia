@@ -7,7 +7,7 @@ import {
   SubCategory,
 } from "../products/HomeProductSlice";
 
-type SearchQueryType = {
+export type SearchQueryType = {
   searchQuery: string;
   filters: {
     SubCategory: (SubCategory | null)[] | null;
