@@ -15,6 +15,8 @@ import FilterScreen from "../screens/loggedInStack/FilterScreen";
 import ProductDetailScreen from "../screens/loggedInStack/ProductDetailScreen";
 import HeaderCartButton from "../components/UI/HeaderCartButton";
 import { useNavigation } from "@react-navigation/native";
+import ProductReviewScreen from "../screens/loggedInStack/ProductReviewScreen";
+import { ReviewType } from "../features/productDetail/ProductDetailApi";
 
 type Props = {};
 
@@ -38,6 +40,9 @@ export type RootLoggedInStackParamList = {
   };
   productDetail: {
     productId: string;
+  };
+  review: {
+    reviewArray: ReviewType[];
   };
 };
 
@@ -99,6 +104,11 @@ const LoggedInStack = () => {
             />
           ),
         }}
+      />
+      <loggedInStack.Screen
+        name="review"
+        component={ProductReviewScreen}
+        options={{ title: "Ratings & Reviews" }}
       />
     </loggedInStack.Navigator>
   );

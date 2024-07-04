@@ -44,7 +44,9 @@ type PropTypes = {
 
 const ProductDetailScreen = ({ route }: PropTypes) => {
   const [getProductDetails, { isLoading }] = useGetProductDetailsMutation();
+
   const [productDetails, setProductDetails] = useState<ProductDetailType>();
+  const [quantity, setQuantity] = useState("0");
 
   useEffect(() => {
     const getProductDetailsHandler = async () => {
@@ -61,6 +63,19 @@ const ProductDetailScreen = ({ route }: PropTypes) => {
 
     getProductDetailsHandler();
   }, []);
+
+  const onChangeQuantityInput = (text: string) => {
+    if (text.length === 1 && text.match(/[0-9]/)) {
+      setQuantity(text);
+    }
+  };
+
+  const incrementQuantity = () => {
+    // Add to Cart
+  };
+  const decrementQuantity = () => {
+    // Subtract from Cart
+  };
 
   if (productDetails === undefined) {
     return (
@@ -87,31 +102,31 @@ const ProductDetailScreen = ({ route }: PropTypes) => {
           <View style={styles.informationContainer}>
             <Text style={styles.productName}>{productDetails?.name}</Text>
             <Text style={styles.productBrand}>{productDetails?.brand}</Text>
-            {/* <View>
-            <Text>{productDetails?.category}</Text>
-          </View> */}
+            <View style={styles.categoryContainer}>
+              <Text style={styles.categoryText}>
+                {productDetails?.category}
+              </Text>
+            </View>
             <View style={styles.ratingContainer}>
               <Ionicons name={"star"} size={24} color={COLORS.accent} />
-              <Text style={styles.ratingText}>
-                {productDetails.rating ?? 4.3}
-              </Text>
+              <Text style={styles.ratingText}>{productDetails?.rating}</Text>
             </View>
             <Text style={styles.descText}>{productDetails?.description}</Text>
             <Text style={styles.price}>$ {productDetails?.price}</Text>
           </View>
           <View style={styles.buttonContainer}>
             <View style={styles.quantityControl}>
-              <PlusButton onPressAction={() => {}}>
+              <PlusButton onPressAction={incrementQuantity}>
                 <Ionicons name="add" size={30} color={COLORS.fgPrimary} />
               </PlusButton>
               <TextInput
                 keyboardType="number-pad"
                 style={styles.quantityInput}
-                //  onChangeText={}
-                //  value={}
+                onChangeText={onChangeQuantityInput}
+                value={quantity}
                 //  onBlur={onBlurMinPrice}
               />
-              <PlusButton onPressAction={() => {}}>
+              <PlusButton onPressAction={decrementQuantity}>
                 <Ionicons name={"remove"} size={30} color={COLORS.fgPrimary} />
               </PlusButton>
             </View>
@@ -150,50 +165,64 @@ const ProductDetailScreen = ({ route }: PropTypes) => {
             />
           </View>
         </View>
+
         <View style={styles.reviewContainer}>
           <Text style={styles.specificationHeading}>Ratings and Reviews</Text>
           <View style={styles.reviewInnerContainer}>
             <View style={styles.ratingControl}>
-              <View style={styles.ratingTextContainer}>
-                <View style={styles.overallRatingContainer}>
-                  {/* <Text>{productDetails?.rating}</Text> */}
-                  <Text style={styles.numRating}>4.3</Text>
-                  <Text style={styles.totalRating}>/5</Text>
+              {productDetails.reviews.length > 0 ? (
+                <View style={styles.ratingTextContainer}>
+                  <View style={styles.overallRatingContainer}>
+                    {/* <Text>{productDetails?.rating}</Text> */}
+                    <Text style={styles.numRating}>
+                      {productDetails?.rating}
+                    </Text>
+                    <Text style={styles.totalRating}>/5</Text>
+                  </View>
+                  <Text style={styles.overallRatingText}>Overall Rating</Text>
                 </View>
-                <Text style={styles.overallRatingText}>Overall Rating</Text>
-              </View>
+              ) : (
+                <Text style={styles.reviewFallbackText}>
+                  Be the First One To Rate
+                </Text>
+              )}
               <Pressable onPress={() => {}}>
                 <View style={styles.rateButton}>
                   <Text style={styles.rateText}>Rate</Text>
                 </View>
               </Pressable>
             </View>
-            <View>
-              {productDetails?.reviews.slice(0, 2).map((review, index) => (
-                <ReviewEntry
-                  key={index}
-                  comment={review.comment}
-                  rating={Number(review.rating)}
-                  userName={review.userName}
-                  date={review.date}
-                />
-              ))}
-            </View>
-            <View style={styles.viewReviewContainer}>
-              <TextButton
-                title="View All Reviews"
-                onPressAction={() => {}}
-                fontSize={20}
-                fontWeight={"bold"}
-                fontFamily={"oxygen"}
-                color={COLORS.textPrimary}
-              />
-              <Ionicons
-                name="chevron-forward"
-                size={24}
-                color={COLORS.textPrimary}
-              />
-            </View>
+
+            {productDetails.reviews.length > 0 && (
+              <>
+                <View>
+                  {productDetails?.reviews.slice(0, 2).map((review, index) => (
+                    <ReviewEntry
+                      key={index}
+                      comment={review.comment}
+                      rating={Number(review.rating)}
+                      userName={review.userName}
+                      date={review.date}
+                    />
+                  ))}
+                </View>
+                <View style={styles.viewReviewContainer}>
+                  <TextButton
+                    title="View All Reviews"
+                    onPressAction={() => {}}
+                    fontSize={20}
+                    fontWeight={"bold"}
+                    fontFamily={"oxygen"}
+                    color={COLORS.textPrimary}
+                  />
+                  <Ionicons
+                    name="chevron-forward"
+                    size={24}
+                    color={COLORS.textPrimary}
+                  />
+                </View>
+              </>
+            )}
           </View>
         </View>
       </View>
@@ -248,6 +277,18 @@ const styles = StyleSheet.create({
   productBrand: {
     ...h5Oxygen,
     color: COLORS.textGray,
+  },
+  categoryContainer: {
+    backgroundColor: "white",
+    padding: 5,
+    borderWidth: 1,
+    borderColor: COLORS.accent,
+    borderRadius: 10,
+  },
+  categoryText: {
+    textTransform: "uppercase",
+    fontSize: 16,
+    textAlign: "center",
   },
   ratingContainer: {
     padding: 8,
@@ -308,6 +349,11 @@ const styles = StyleSheet.create({
     borderColor: COLORS.fgPrimary,
     padding: 20,
     backgroundColor: COLORS.bgSecondary,
+  },
+  reviewFallbackText: {
+    alignItems: "center",
+    fontSize: 18,
+    marginTop: 5,
   },
   reviewContainer: {
     paddingHorizontal: 10,

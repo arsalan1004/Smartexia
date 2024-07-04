@@ -15,7 +15,7 @@ export type CategoryProductType = {
 export const CategoryProductsApi = createApi({
   reducerPath: "categoryProductsApi",
   baseQuery: fetchBaseQuery({
-    baseUrl: "http://192.168.2.103:5022",
+    baseUrl: "http://192.168.2.100:5022",
     // prepareHeaders: (headers) => {
     //   // Set the Content-Type header to application/json
     //   headers.set("Content-Type", "application/json");
