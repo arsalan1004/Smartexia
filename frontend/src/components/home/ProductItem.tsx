@@ -13,6 +13,9 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "react-native-screens/lib/typescript/native-stack/types";
 import { RootLoggedInStackParamList } from "../../navigation/LoggedInStack";
+import { useIncrementQuantityMutation } from "../../features/cart/CartApi";
+import { useSelector } from "react-redux";
+import { RootState } from "../../../store";
 // import WishlistButton from "../UI/WishlistButton";
 
 type PropTypes = {
@@ -47,10 +50,28 @@ PropTypes) => {
       NativeStackNavigationProp<RootLoggedInStackParamList, "productDetail">
     >();
 
+  const { userId } = useSelector((state: RootState) => state.auth);
+  const [incrementQuantity] = useIncrementQuantityMutation();
+
   const onPressHandler = () => {
     console.log("Nav to Product Detail");
     navigation.navigate("productDetail", { productId: productId });
     console.log("Product ID: ", productId);
+  };
+
+  const onPressIncrementHandler = async () => {
+    const queryArg = {
+      userId: userId,
+      productId: Number(productId),
+      quantity: 1,
+    };
+    console.log("Single Increment called");
+    // try {
+    //   const response = await incrementQuantity(queryArg).unwrap();
+    //   console.log(response);
+    // } catch (err) {
+    //   console.log(err);
+    // }
   };
 
   return (
@@ -81,7 +102,7 @@ PropTypes) => {
           <Ionicons name="star" size={24} color={COLORS.fgPrimary} />
           <Text style={styles.ratingTextStyle}>({rating})</Text>
         </View>
-        <PlusButton onPressAction={() => {}}>
+        <PlusButton onPressAction={onPressIncrementHandler}>
           <Ionicons name="add" size={30} color={COLORS.fgPrimary} />
         </PlusButton>
       </View>

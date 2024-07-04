@@ -13,6 +13,9 @@ import SwitchScreen from "../../components/login/SwitchScreen";
 import { usePostRegDataMutation } from "../../features/loginReg/RegDataApi";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import LoginContext from "../../context/LoginContext";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "../../../store";
+import { login } from "../../features/auth/AuthSlice";
 
 type RegistrationScreenNavigationProp = NativeStackNavigationProp<
   RootLoggedOutStackParamList,
@@ -37,6 +40,7 @@ export type RegistrationFormFields = {
 
 const Registration = ({ navigation }: PropTypes) => {
   const { updateIsLoggedIn, isLoggedIn } = useContext(LoginContext);
+  const dispatch = useDispatch<AppDispatch>();
 
   const [postRegData, { isLoading, isSuccess, isError }] =
     usePostRegDataMutation();
@@ -68,6 +72,7 @@ const Registration = ({ navigation }: PropTypes) => {
       console.log("RESPONSE", res);
       setToastMessage(res.message);
       updateIsLoggedIn(true);
+      //dispatch(login({token: "", userId: res.userId}))
       AsyncStorage.setItem("isLoggedIn", "true");
     } catch (error: any) {
       console.log("error", error);

@@ -33,6 +33,9 @@ import { RegistrationFormFields } from "./Registration";
 import MaskPasswordButton from "../../components/UI/MaskPasswordButton";
 import SwitchScreen from "../../components/login/SwitchScreen";
 import { loginRegStyles } from "../../constants/SharedStyles";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "../../../store";
+import { login } from "../../features/auth/AuthSlice";
 //import axios from "axios";
 
 // TODO
@@ -65,6 +68,7 @@ export type GoogleLoginFields = {
 
 const Login = ({ navigation }: PropTypes) => {
   const { updateIsLoggedIn, isLoggedIn } = useContext(LoginContext);
+  const dispatch = useDispatch<AppDispatch>();
 
   const [postLoginData, { isError, isLoading, isSuccess }] =
     usePostLoginDataMutation();
@@ -127,6 +131,7 @@ const Login = ({ navigation }: PropTypes) => {
         postGoogleLoginData(googleData);
         setToastMessage("Google Login Successful");
         updateIsLoggedIn(true);
+        // dispatch(login({token: "", userId: response.userId}))
         AsyncStorage.setItem("@isLoggedIn", "true");
       } catch (error) {
         setToastMessage("Error signing in with credential");
@@ -148,7 +153,10 @@ const Login = ({ navigation }: PropTypes) => {
       console.log("RESPONSE", res);
       setToastMessage(res.message);
       AsyncStorage.setItem("@isLoggedIn", "true");
+      // set
       updateIsLoggedIn(true);
+
+      // dispatch(login({token: "", userId: response.userId}))
     } catch (error: any) {
       console.log("error", error);
       setToastMessage(error.data.message ?? "An error occurred");

@@ -32,6 +32,12 @@ import { Protocol } from "../../features/products/HomeProductSlice";
 import SpecificationEntry from "../../components/productDetail/SpecificationEntry";
 import ReviewEntry from "../../components/productDetail/ReviewEntry";
 import TextButton from "../../components/UI/TextButton";
+import {
+  useDecrementQuantityMutation,
+  useIncrementQuantityMutation,
+} from "../../features/cart/CartApi";
+import { RootState } from "../../../store";
+import { useSelector } from "react-redux";
 
 type ProductDetailRouteProp = RouteProp<
   RootLoggedInStackParamList,
@@ -44,6 +50,10 @@ type PropTypes = {
 
 const ProductDetailScreen = ({ route }: PropTypes) => {
   const [getProductDetails, { isLoading }] = useGetProductDetailsMutation();
+  const [incrementQuantity] = useIncrementQuantityMutation();
+  const [decrementQuantity] = useDecrementQuantityMutation();
+
+  const { userId } = useSelector((state: RootState) => state.auth);
 
   const [productDetails, setProductDetails] = useState<ProductDetailType>();
   const [quantity, setQuantity] = useState("0");
@@ -65,16 +75,42 @@ const ProductDetailScreen = ({ route }: PropTypes) => {
   }, []);
 
   const onChangeQuantityInput = (text: string) => {
-    if (text.length === 1 && text.match(/[0-9]/)) {
-      setQuantity(text);
+    if (text.length === 2 && text.match(/[0-9]/)) {
+      setQuantity(text[1]);
     }
   };
 
-  const incrementQuantity = () => {
-    // Add to Cart
+  const incrementQuantityHandler = async () => {
+    const queryObject = {
+      userId: userId,
+      productId: Number(route.params.productId),
+      quantity: quantity,
+    };
+
+    console.log("Multi Increment Called", queryObject);
+    // try {
+    //   const response = await incrementQuantity(queryObject).unwrap();
+    //   console.log(response);
+    //   setQuantity("0");
+    // } catch (error) {
+    //   console.log(error);
+    // }
   };
-  const decrementQuantity = () => {
-    // Subtract from Cart
+  const decrementQuantityHandler = () => {
+    const queryObject = {
+      userId: userId,
+      productId: Number(route.params.productId),
+      quantity: quantity,
+    };
+
+    console.log("Multi Decrement Called", queryObject);
+    // try {
+    //   const response = await decrementQuantity(queryObject).unwrap();
+    //   console.log(response);
+    //   setQuantity("0");
+    // } catch (error) {
+    //   console.log(error);
+    // }
   };
 
   if (productDetails === undefined) {
@@ -116,7 +152,7 @@ const ProductDetailScreen = ({ route }: PropTypes) => {
           </View>
           <View style={styles.buttonContainer}>
             <View style={styles.quantityControl}>
-              <PlusButton onPressAction={incrementQuantity}>
+              <PlusButton onPressAction={incrementQuantityHandler}>
                 <Ionicons name="add" size={30} color={COLORS.fgPrimary} />
               </PlusButton>
               <TextInput
@@ -126,11 +162,11 @@ const ProductDetailScreen = ({ route }: PropTypes) => {
                 value={quantity}
                 //  onBlur={onBlurMinPrice}
               />
-              <PlusButton onPressAction={decrementQuantity}>
+              <PlusButton onPressAction={decrementQuantityHandler}>
                 <Ionicons name={"remove"} size={30} color={COLORS.fgPrimary} />
               </PlusButton>
             </View>
-            <MainButton
+            {/* <MainButton
               title="ADD TO CART"
               onPressAction={() => {}}
               // disabled={errors.email && errors.password ? true : false}
@@ -138,7 +174,7 @@ const ProductDetailScreen = ({ route }: PropTypes) => {
               variant="primary"
               paddingVertical={12}
               widthPC={30}
-            />
+            /> */}
           </View>
         </View>
 
@@ -313,15 +349,14 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   buttonContainer: {
-    flexDirection: "row",
     justifyContent: "space-between",
     paddingHorizontal: 10,
     marginTop: 10,
+    alignItems: "flex-end",
   },
   quantityControl: {
     flexDirection: "row",
     width: "40%",
-    alignItems: "center",
   },
   quantityInput: {
     width: "40%",
