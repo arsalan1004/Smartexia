@@ -16,14 +16,17 @@ public class ProductDetails:Controller
     private readonly ProductProtocolService _productProtocolService;
     private readonly ProductNetworkBandService  _productNetworkBandService;
     private readonly ProductReviewsService _productReviewsService;
+    private readonly ProductRatingsService _productRatingsService;
+
     private readonly smartexiaContext _smartexiaContext;
     
-    public ProductDetails(ProductFirmwareService productFirmwareService, ProductProtocolService productProtocolService, ProductNetworkBandService productNetworkBandService, ProductReviewsService productReviewsService, smartexiaContext smartexiaContext)
+    public ProductDetails(ProductFirmwareService productFirmwareService, ProductProtocolService productProtocolService, ProductNetworkBandService productNetworkBandService, ProductReviewsService productReviewsService, smartexiaContext smartexiaContext, ProductRatingsService productRatingsService)
     {
         _productFirmwareService = productFirmwareService;
         _productProtocolService = productProtocolService;
         _productNetworkBandService = productNetworkBandService;
         _productReviewsService = productReviewsService;
+        _productRatingsService = productRatingsService;
         _smartexiaContext = smartexiaContext;
     }
 
@@ -39,15 +42,18 @@ public class ProductDetails:Controller
             var productNetworkBand =  await _productNetworkBandService.getProductNetworkBand(requestdto.productId);
             var reviews = await _productReviewsService.getProductReviews(requestdto.productId);
             
-            var product = _smartexiaContext.Product.Where(p => p.id == requestdto.productId).Include(x=>x.brand).Select(x => new ProductDetailsdto
+            var product = _smartexiaContext.Product.Where(p => p.id == requestdto.productId).Include(x=>x.brand).Include(x=>x.category).Select(x => new ProductDetailsdto
             {
                 id = x.id,
                 name = x.name,
                 description = x.description,
                 imageUrl = x.imageUrl,
                 price = x.price,
-                brand = x.brand.name
+                brand = x.brand.name,
+                category = x.category.name,
             }).ToList()[0];
+
+            float productRating = _productRatingsService.getProductRatings(product.id).Result.rating;
             
             var productDetails = new
             {
@@ -57,6 +63,8 @@ public class ProductDetails:Controller
                 imageUrl = product.imageUrl,
                 price = product.price,
                 brand = product.brand,
+                category = product.category,
+                rating = (float)Math.Round(productRating,1),
                 specifications = new
                 {
                     firmware = productFirmware,

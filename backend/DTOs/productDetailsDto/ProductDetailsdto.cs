@@ -8,4 +8,6 @@ public class ProductDetailsdto
     public string imageUrl { get; set; }
     public double price { get; set; }
     public string brand { get; set; }
+    public float rating { get; set; }
+    public string category { get; set; }
 }

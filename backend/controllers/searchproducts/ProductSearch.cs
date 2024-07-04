@@ -1,6 +1,7 @@
 using System.Globalization;
 using ApiDependencies.DTOs.searchDto;
 using backend.data;
+using backend.services.productDetailsServices;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -10,10 +11,12 @@ namespace backend.controllers.searchproducts;
 public class ProductSearch: Controller
 {
     private readonly smartexiaContext _smartexiaContext;
+    private readonly ProductRatingsService _productRatingsService;
 
-    public ProductSearch(smartexiaContext smartexiaContext)
+    public ProductSearch(smartexiaContext smartexiaContext, ProductRatingsService productRatingsService)
     {
         _smartexiaContext = smartexiaContext;
+        _productRatingsService = productRatingsService;
     }
     
     [HttpPost]
@@ -24,21 +27,6 @@ public class ProductSearch: Controller
         try
         {
             TextInfo textInfo = CultureInfo.CurrentCulture.TextInfo;
-            // var products = await _smartexiaContext.Product
-            //     .Where(x => x.name.Contains(textInfo.ToTitleCase(query.searchQuery)) 
-            //                 || (query.filters.SubCategory.Contains(x.subCategory) 
-            //                 && x.price >= query.priceRange.min 
-            //                 && x.price <= query.priceRange.max))
-            //     .Select(x => new
-            //     {
-            //         id = x.id,
-            //         name = x.name,
-            //         imageUrl = x.imageUrl,
-            //         price = x.price,
-            //         subCategory = x.subCategory,
-            //         rating = 0
-            //     })
-            //     .ToListAsync();
 
             var products = await _smartexiaContext.Product
               .Where(x => x.name.Contains(textInfo.ToTitleCase(query.searchQuery))
@@ -52,11 +40,29 @@ public class ProductSearch: Controller
                   imageUrl = x.imageUrl,
                   price = x.price,
                   subCategory = x.subCategory,
-                  rating = 0 // Assuming rating is a placeholder for future implementation
               })
               .ToListAsync();
+            
+            var productRatings = new List<object>();
 
-            return Ok(products);
+            foreach (var p in products)
+            {
+                var ratingDto = await _productRatingsService.getProductRatings(p.id);
+                var productWithRating = new 
+                {
+                    p.id,
+                    p.name,
+                    p.imageUrl,
+                    p.price,
+                    p.subCategory,
+                    rating = (float)Math.Round(ratingDto.rating, 1)
+                };
+                productRatings.Add(productWithRating);
+            }
+            
+            if(!productRatings.Any()) return NotFound(new {message="No products found", status = 404});
+            return Ok(productRatings);
+
         }
         catch (Exception e)
         {
