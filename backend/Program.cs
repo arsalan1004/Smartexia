@@ -12,7 +12,7 @@ var builder = WebApplication.CreateBuilder(args);
 //     options.AddPolicy(name: MyAllowSpecificOrigins,
 //       policy  =>
 //       {
-//           policy.WithOrigins("http://localhost:8081", "http://192.168.2.103:8081", "http://192.168.2.1:8081");
+//           policy.WithOrigins("http://localhost:8081", "http://192.168.2.100:8081", "http://192.168.2.1:8081");
 //       });
 // });
 
