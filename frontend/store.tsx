@@ -8,6 +8,7 @@ import { CategoryApi } from "./src/features/category/CategoryApi";
 import { CategoryProductsApi } from "./src/features/categoryProducts/CategoryProductsApi";
 
 import SearchProductReducer from "./src/features/search/SearchProductSlice";
+import { ProductDetailApi } from "./src/features/productDetail/ProductDetailApi";
 const store = configureStore({
   reducer: {
     [loginDataApi.reducerPath]: loginDataApi.reducer,
@@ -16,6 +17,7 @@ const store = configureStore({
     [SearchResultApi.reducerPath]: SearchResultApi.reducer,
     [CategoryApi.reducerPath]: CategoryApi.reducer,
     [CategoryProductsApi.reducerPath]: CategoryProductsApi.reducer,
+    [ProductDetailApi.reducerPath]: ProductDetailApi.reducer,
     homeProduct: HomeProductReducer,
     searchProduct: SearchProductReducer,
   },
@@ -27,6 +29,7 @@ const store = configureStore({
       SearchResultApi.middleware,
       CategoryApi.middleware,
       CategoryProductsApi.middleware,
+      ProductDetailApi.middleware,
     ]),
 });
 

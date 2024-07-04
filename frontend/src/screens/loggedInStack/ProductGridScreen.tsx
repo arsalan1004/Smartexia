@@ -4,7 +4,7 @@ import { NavigationProp } from "@react-navigation/native";
 import { BottomTabNavigationProp } from "@react-navigation/bottom-tabs";
 import ProductGrid from "../../components/product/ProductGrid";
 import { RouteProp } from "@react-navigation/native";
-import { RootLoggedInStackParamList } from "../../../App";
+import { RootLoggedInStackParamList } from "../../navigation/LoggedInStack";
 import { ProductType } from "../../features/products/HomeProductSlice";
 import {
   CategoryProductType,

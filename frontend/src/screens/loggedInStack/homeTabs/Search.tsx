@@ -16,7 +16,7 @@ import {
 import NoHistory from "../../../../assets/images/noHistory.svg";
 import { RootHomeTabsParamList } from "../../../navigation/HomeTabs";
 import { BottomTabNavigationProp } from "@react-navigation/bottom-tabs";
-import { RootLoggedInStackParamList } from "../../../../App";
+import { RootLoggedInStackParamList } from "../../../navigation/LoggedInStack";
 
 type SearchScreenNavigationProp = BottomTabNavigationProp<
   RootHomeTabsParamList & {

@@ -18,7 +18,7 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 import { COLORS, b2Roboto, h4Oxygen } from "../../constants/colors";
 import MainButton from "../../components/UI/MainButton";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import { RootLoggedInStackParamList } from "../../../App";
+import { RootLoggedInStackParamList } from "../../navigation/LoggedInStack";
 import { RouteProp } from "@react-navigation/native";
 import { SearchQueryType } from "../../features/searchProductResults/SearchResultsApi";
 import { useDispatch, useSelector } from "react-redux";
