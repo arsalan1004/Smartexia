@@ -25,7 +25,7 @@ import HomeProductSlice, {
 import { useGetHomeProductsQuery } from "../../../features/products/HomeProductApi";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../../store";
-import { RootLoggedInStackParamList } from "../../../../App";
+import { RootLoggedInStackParamList } from "../../../navigation/LoggedInStack";
 import { useGetCategoriesQuery } from "../../../features/category/CategoryApi";
 
 type HomeScreenNavigationProp = BottomTabNavigationProp<

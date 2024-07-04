@@ -22,11 +22,11 @@ const ProductList = ({ listData, horizontal }: PropTypes) => {
         data={listData}
         renderItem={({ item }: ListRenderItemInfo<ProductType>) => (
           <ProductItem
+            productId={item.id}
             imageUrl={item.imageUrl}
             name={item.name}
             price={item.price}
             rating={item.rating}
-            onPressAction={() => {}}
             applyWidth={false}
           />
         )}

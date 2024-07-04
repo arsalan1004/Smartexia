@@ -10,6 +10,9 @@ import React from "react";
 import { ProductType } from "../../features/products/HomeProductSlice";
 import ProductItem from "../home/ProductItem";
 import { CategoryProductType } from "../../features/categoryProducts/CategoryProductsApi";
+import { useNavigation } from "@react-navigation/native";
+import { RootLoggedInStackParamList } from "../../navigation/LoggedInStack";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 
 type listType = ProductType | CategoryProductType;
 type listArrayType = ProductType[] | CategoryProductType[];
@@ -19,17 +22,26 @@ type PropTypes = {
 };
 
 const ProductGrid = ({ listData }: PropTypes) => {
+  const navigation =
+    useNavigation<
+      NativeStackNavigationProp<RootLoggedInStackParamList, "productDetail">
+    >();
+
   return (
     <View style={styles.containerStyles}>
       <FlatList
         data={listData}
         renderItem={({ item }: ListRenderItemInfo<listType>) => (
           <ProductItem
+            productId={item.id}
             imageUrl={item.imageUrl}
             name={item.name}
             price={item.price}
             rating={item.rating}
-            onPressAction={() => {}}
+            // onPressAction={() => {
+            //   navigation.navigate("productDetail", { productId: item.id });
+            //   console.log("Product ID: ", item.id);
+            // }}
             applyWidth={false}
           />
         )}
