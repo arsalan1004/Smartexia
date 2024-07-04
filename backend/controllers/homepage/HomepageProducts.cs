@@ -1,20 +1,25 @@
 using ApiDependencies.filters.authFiler;
 using backend.data;
+using backend.DTOs.productDetailsDto;
 using backend.models.category;
+using backend.services.productDetailsServices;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace backend.controllers.homepage;
 
 [ApiController]
-public class HomepageProducts:Controller
+public class 
+    HomepageProducts:Controller
 {
 
     private readonly smartexiaContext _smartexiaContext;
+    private readonly ProductRatingsService _productRatingsService;
     
-    public HomepageProducts(smartexiaContext smartexiaContext)
+    public HomepageProducts(smartexiaContext smartexiaContext, ProductRatingsService productRatingsService)
     {
         _smartexiaContext = smartexiaContext;
+        _productRatingsService = productRatingsService;
     }
     
     [HttpGet]
@@ -50,9 +55,24 @@ public class HomepageProducts:Controller
                 .Take(10)
                 .Select(p => new { p.id,p.name, p.price, p.imageUrl})
                 .ToListAsync();
-            if(!products.Any()) return NotFound(new {message="No products found", status = 404});
+            var productRatings = new List<object>();
+
+            foreach (var p in products)
+            {
+                var ratingDto = await _productRatingsService.getProductRatings(p.id);
+                var productWithRating = new 
+                {
+                    p.id,
+                    p.name,
+                    p.price,
+                    p.imageUrl,
+                    rating = (float)Math.Round(ratingDto.rating, 1)
+                };
+                productRatings.Add(productWithRating);
+            }
             
-            return Ok(products);
+            if(!productRatings.Any()) return NotFound(new {message="No products found", status = 404});
+            return Ok(productRatings);
         }
         catch (Exception e)
         {
@@ -73,9 +93,24 @@ public class HomepageProducts:Controller
                 .Take(15)
                 .Select(p => new { p.id,p.name, p.price, p.imageUrl})
                 .ToListAsync();
-            if(!products.Any()) return NotFound(new {message="No products found", status = 404});
+            var productRatings = new List<object>();
+
+            foreach (var p in products)
+            {
+                var ratingDto = await _productRatingsService.getProductRatings(p.id);
+                var productWithRating = new 
+                {
+                    p.id,
+                    p.name,
+                    p.price,
+                    p.imageUrl,
+                    rating = (float)Math.Round(ratingDto.rating, 1)
+                };
+                productRatings.Add(productWithRating);
+            }
             
-            return Ok(products);
+            if(!productRatings.Any()) return NotFound(new {message="No products found", status = 404});
+            return Ok(productRatings);
         }
         catch (Exception e)
         {
@@ -96,9 +131,24 @@ public class HomepageProducts:Controller
                 .Take(20)
                 .Select(p => new {p.id, p.name, p.price, p.imageUrl})
                 .ToListAsync();
-            if(!products.Any()) return NotFound(new {message="No products found", status = 404});
+            var productRatings = new List<object>();
+
+            foreach (var p in products)
+            {
+                var ratingDto = await _productRatingsService.getProductRatings(p.id);
+                var productWithRating = new 
+                {
+                    p.id,
+                    p.name,
+                    p.price,
+                    p.imageUrl,
+                    rating = (float)Math.Round(ratingDto.rating, 1)
+                };
+                productRatings.Add(productWithRating);
+            }
             
-            return Ok(products);
+            if(!productRatings.Any()) return NotFound(new {message="No products found", status = 404});
+            return Ok(productRatings);
         }
         catch (Exception e)
         {
@@ -119,9 +169,24 @@ public class HomepageProducts:Controller
                 .Take(90)
                 .Select(p => new { p.id, p.name, p.price, p.imageUrl})
                 .ToListAsync();
-            if(!products.Any()) return NotFound(new {message="No products found", status = 404});
+            var productRatings = new List<object>();
+
+            foreach (var p in products)
+            {
+                var ratingDto = await _productRatingsService.getProductRatings(p.id);
+                var productWithRating = new 
+                {
+                    p.id,
+                    p.name,
+                    p.price,
+                    p.imageUrl,
+                    rating = (float)Math.Round(ratingDto.rating, 1)
+                };
+                productRatings.Add(productWithRating);
+            }
             
-            return Ok(products);
+            if(!productRatings.Any()) return NotFound(new {message="No products found", status = 404});
+            return Ok(productRatings);
         }
         catch (Exception e)
         {
