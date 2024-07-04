@@ -1,5 +1,7 @@
 using ApiDependencies.authentication;
 using ApiDependencies.filters.authFiler;
+using ApiDependencies.services.productDetailsServices;
+using backend.services.productDetailsServices;
 using Firebase.Auth;
 using Firebase.Auth.Providers;
 using FirebaseAdmin;
@@ -18,6 +20,7 @@ namespace ApiDependencies
             service.AddFirebaseServices();
             service.AddAuthenticationServices();
             service.AddFilterServices();
+            service.AddProductServices();
             return service;
         }
 
@@ -71,6 +74,15 @@ namespace ApiDependencies
         private static IServiceCollection AddFilterServices(this IServiceCollection service)
         {
             service.AddScoped<TokenAuthenticationFilter>();
+            return service;
+        }
+        
+        private static IServiceCollection AddProductServices(this IServiceCollection service)
+        {
+            service.AddScoped<ProductFirmwareService>();
+            service.AddScoped<ProductProtocolService>();
+            service.AddScoped<ProductNetworkBandService>();
+            service.AddScoped<ProductReviewsService>();
             return service;
         }
        
