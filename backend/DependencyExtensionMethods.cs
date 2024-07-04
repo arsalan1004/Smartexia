@@ -83,6 +83,7 @@ namespace ApiDependencies
             service.AddScoped<ProductProtocolService>();
             service.AddScoped<ProductNetworkBandService>();
             service.AddScoped<ProductReviewsService>();
+            service.AddScoped<ProductRatingsService>();
             return service;
         }
        
