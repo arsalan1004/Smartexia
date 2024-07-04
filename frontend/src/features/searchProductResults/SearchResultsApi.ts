@@ -22,11 +22,11 @@ export type SearchQueryType = {
 
 export const SearchResultApi = createApi({
   reducerPath: "searchResultApi",
-  baseQuery: fetchBaseQuery({ baseUrl: "http://192.168.2.100:5022" }),
+  baseQuery: fetchBaseQuery({ baseUrl: "http://192.168.2.103:5022" }),
   endpoints: (builder) => ({
     getSearchedProducts: builder.mutation<ProductType[], SearchQueryType>({
       query: (searchQuery) => ({
-        url: "/search",
+        url: "/search/products",
         method: "POST",
         body: searchQuery,
         //credentials: "same-origin",

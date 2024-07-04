@@ -11,6 +11,7 @@ import { useDispatch } from "react-redux";
 import {
   clearSearchHistory,
   setSearchQuery,
+  updateSearchHistory,
 } from "../../../features/search/SearchProductSlice";
 import NoHistory from "../../../../assets/images/noHistory.svg";
 import { RootHomeTabsParamList } from "../../../navigation/HomeTabs";
@@ -53,6 +54,7 @@ const Search = ({ navigation }: PropTypes) => {
       title: "Search Results",
       searchQuery: searchValue,
     });
+    dispatch(updateSearchHistory(searchValue));
   };
 
   const onSubmit = (data: searchFormFields) => {

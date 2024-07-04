@@ -33,9 +33,14 @@ const ProductGridScreen = ({ route }: PropTypes) => {
   useEffect(() => {
     const getCategoriesHandler = async () => {
       try {
-        const response = await getCategories(route.params.categoryId!).unwrap();
+        console.log(`@36: ${route.params.categoryId}`);
+        const response = await getCategories(
+          Number(route.params.categoryId)!
+        ).unwrap();
+        console.log(`@40: ${response}`);
         setCategoryProducts(response);
       } catch (error) {
+        console.log(`@39${error}`);
         console.log(error);
       }
     };

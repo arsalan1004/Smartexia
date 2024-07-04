@@ -24,21 +24,37 @@ public class ProductSearch: Controller
         try
         {
             TextInfo textInfo = CultureInfo.CurrentCulture.TextInfo;
+            // var products = await _smartexiaContext.Product
+            //     .Where(x => x.name.Contains(textInfo.ToTitleCase(query.searchQuery)) 
+            //                 || (query.filters.SubCategory.Contains(x.subCategory) 
+            //                 && x.price >= query.priceRange.min 
+            //                 && x.price <= query.priceRange.max))
+            //     .Select(x => new
+            //     {
+            //         id = x.id,
+            //         name = x.name,
+            //         imageUrl = x.imageUrl,
+            //         price = x.price,
+            //         subCategory = x.subCategory,
+            //         rating = 0
+            //     })
+            //     .ToListAsync();
+
             var products = await _smartexiaContext.Product
-                .Where(x => x.name.Contains(textInfo.ToTitleCase(query.searchQuery)) 
-                            && query.filters.SubCategory.Contains(x.subCategory) 
-                            && x.price >= query.priceRange.min 
-                            && x.price <= query.priceRange.max)
-                .Select(x => new
-                {
-                    id = x.id,
-                    name = x.name,
-                    imageUrl = x.imageUrl,
-                    price = x.price,
-                    subCategory = x.subCategory,
-                    rating = 0
-                })
-                .ToListAsync();
+              .Where(x => x.name.Contains(textInfo.ToTitleCase(query.searchQuery))
+                          && (query.filters.SubCategory == null || !query.filters.SubCategory.Any() || query.filters.SubCategory.Contains(x.subCategory))
+                          && x.price >= query.priceRange.min
+                          && x.price <= query.priceRange.max)
+              .Select(x => new
+              {
+                  id = x.id,
+                  name = x.name,
+                  imageUrl = x.imageUrl,
+                  price = x.price,
+                  subCategory = x.subCategory,
+                  rating = 0 // Assuming rating is a placeholder for future implementation
+              })
+              .ToListAsync();
 
             return Ok(products);
         }

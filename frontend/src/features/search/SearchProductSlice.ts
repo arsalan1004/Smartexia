@@ -109,11 +109,11 @@ export const DefaultInitialFilters: Filters = {
 const initialSearchQueryObject: SearchQueryType = {
   searchQuery: "Bulb",
   filters: {
-    SubCategory: ["Smart Bulb"],
+    SubCategory: [],
   },
   priceRange: {
     min: 10,
-    max: 500,
+    max: 2000,
   },
 };
 
@@ -134,7 +134,9 @@ const SearchProductSlice = createSlice({
       if (state.searchHistory.length > 5) {
         state.searchHistory.pop();
       }
-      state.searchHistory.unshift(action.payload);
+      if (!state.searchHistory.includes(action.payload)) {
+        state.searchHistory.unshift(action.payload);
+      }
     },
     clearSearchHistory: (state) => {
       state.searchHistory = [];

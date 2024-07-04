@@ -19,7 +19,7 @@ public class HomepageProducts:Controller
     
     [HttpGet]
     [Route("/homepage/categories")]
-    [ServiceFilter(typeof(TokenAuthenticationFilter))]
+    // [ServiceFilter(typeof(TokenAuthenticationFilter))]
     public async Task<IActionResult> getCategories()
     {
         try
@@ -40,7 +40,7 @@ public class HomepageProducts:Controller
     
     [HttpGet]
     [Route("/homepage/discountedproducts")]
-    [ServiceFilter(typeof(TokenAuthenticationFilter))]
+    // [ServiceFilter(typeof(TokenAuthenticationFilter))]
     public async Task<IActionResult> GetDiscountedProducts()
     {
         try
@@ -63,7 +63,7 @@ public class HomepageProducts:Controller
     
     [HttpGet]
     [Route("/homepage/featuredproducts")]
-    [ServiceFilter(typeof(TokenAuthenticationFilter))]
+    // [ServiceFilter(typeof(TokenAuthenticationFilter))]
     public async Task<IActionResult> GetFeaturedProducts()
     {
         try
@@ -86,7 +86,7 @@ public class HomepageProducts:Controller
     
     [HttpGet]
     [Route("/homepage/newproducts")]
-    [ServiceFilter(typeof(TokenAuthenticationFilter))]
+    // [ServiceFilter(typeof(TokenAuthenticationFilter))]
     public async Task<IActionResult> GetNewProducts()
     {
         try
@@ -109,7 +109,7 @@ public class HomepageProducts:Controller
     
     [HttpGet]
     [Route("/homepage/bestsellingproducts")]
-    [ServiceFilter(typeof(TokenAuthenticationFilter))]
+    // [ServiceFilter(typeof(TokenAuthenticationFilter))]
     public async Task<IActionResult> GetBestsellingProducts()
     {
         try

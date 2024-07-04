@@ -53,24 +53,35 @@ export type HomeProductType = keyof HomeProductState;
  */
 
 const Home = ({ navigation }: Props) => {
-  // const { data: discountedProducts } = useGetHomeProductsQuery("discounted");
-  // const { data: featuredProducts } = useGetHomeProductsQuery("featured");
-  // const { data: newArrivedProducts } = useGetHomeProductsQuery("newArrived");
-  // const { data: bestSellingProducts } = useGetHomeProductsQuery("bestSelling");
-  // const { data: categoryList } = useGetCategoriesQuery();
+  const { data: discountedProducts } = useGetHomeProductsQuery(
+    "/homepage/discountedproducts"
+  );
+  const { data: featuredProducts } = useGetHomeProductsQuery(
+    "/homepage/featuredproducts"
+  );
+  const { data: newArrivedProducts } = useGetHomeProductsQuery(
+    "/homepage/newproducts"
+  );
+  const { data: bestSellingProducts } = useGetHomeProductsQuery(
+    "/homepage/bestsellingproducts"
+  );
+  const { data: categoryList } = useGetCategoriesQuery();
 
-  const discountedProducts = useSelector(
-    (state: RootState) => state.homeProduct.discounted
-  );
-  const featuredProducts = useSelector(
-    (state: RootState) => state.homeProduct.featured
-  );
-  const newArrivedProducts = useSelector(
-    (state: RootState) => state.homeProduct.newArrived
-  );
-  const bestSellingProducts = useSelector(
-    (state: RootState) => state.homeProduct.bestSelling
-  );
+  console.log("discountedProducts @Home.tsx - 70", discountedProducts);
+  console.log("bestSellingProducts @Home.tsx - 71", bestSellingProducts);
+
+  // const discountedProducts = useSelector(
+  //   (state: RootState) => state.homeProduct.discounted
+  // );
+  // const featuredProducts = useSelector(
+  //   (state: RootState) => state.homeProduct.featured
+  // );
+  // const newArrivedProducts = useSelector(
+  //   (state: RootState) => state.homeProduct.newArrived
+  // );
+  // const bestSellingProducts = useSelector(
+  //   (state: RootState) => state.homeProduct.bestSelling
+  // );
 
   const navigateTo = (screenTitle: string) => {
     switch (screenTitle) {
@@ -129,7 +140,7 @@ const Home = ({ navigation }: Props) => {
         </Pressable>
         <Text style={styles.titleText}>Categories</Text>
 
-        <FlatList
+        {/* <FlatList
           data={iconsData}
           renderItem={({ item }) => (
             <CategoryButton
@@ -143,15 +154,17 @@ const Home = ({ navigation }: Props) => {
           showsHorizontalScrollIndicator={false}
           ItemSeparatorComponent={() => <View style={{ width: 30 }} />}
           style={styles.listStyle}
-        />
+        /> */}
 
-        {/* <FlatList
+        <FlatList
           data={categoryList}
           renderItem={({ item, index }) => (
             <CategoryButton
               Icon={iconsData[index].Icon}
               label={iconsData[index].label}
-              onPressAction={() => navigateToCategoryProducts(item.id, item.name)}
+              onPressAction={() =>
+                navigateToCategoryProducts(item.id, item.name)
+              }
             />
           )}
           keyExtractor={(item) => item.id}
@@ -159,13 +172,13 @@ const Home = ({ navigation }: Props) => {
           showsHorizontalScrollIndicator={false}
           ItemSeparatorComponent={() => <View style={{ width: 30 }} />}
           style={styles.listStyle}
-        /> */}
+        />
         <HomeProductsViewAll
           heading="Discounted Products"
           onPressAction={() => navigateTo("Discounted Products")}
         />
         <ProductList
-          listData={discountedProducts.slice(0, 5)}
+          listData={discountedProducts?.slice(0, 5) ?? []}
           horizontal={true}
         />
         <HomeProductsViewAll
@@ -173,7 +186,7 @@ const Home = ({ navigation }: Props) => {
           onPressAction={() => navigateTo("Featured Products")}
         />
         <ProductList
-          listData={featuredProducts.slice(0, 5)}
+          listData={featuredProducts?.slice(0, 5) ?? []}
           horizontal={true}
         />
         <HomeProductsViewAll
@@ -181,7 +194,7 @@ const Home = ({ navigation }: Props) => {
           onPressAction={() => navigateTo("New Arrived Products")}
         />
         <ProductList
-          listData={newArrivedProducts.slice(0, 5)}
+          listData={newArrivedProducts?.slice(0, 5) ?? []}
           horizontal={true}
         />
         <HomeProductsViewAll
@@ -189,7 +202,7 @@ const Home = ({ navigation }: Props) => {
           onPressAction={() => navigateTo("Best Selling Products")}
         />
         <ProductList
-          listData={bestSellingProducts.slice(0, 5)}
+          listData={bestSellingProducts?.slice(0, 5) ?? []}
           horizontal={true}
         />
       </View>

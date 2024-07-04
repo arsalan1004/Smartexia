@@ -11,10 +11,18 @@ export type CategoryType = {
 
 export const CategoryApi = createApi({
   reducerPath: "categoryApi",
-  baseQuery: fetchBaseQuery({ baseUrl: "http://192.168.2.100:5022" }),
+  baseQuery: fetchBaseQuery({
+    baseUrl: "http://192.168.2.103:5022",
+    prepareHeaders: (headers) => {
+      // Set the Content-Type header to application/json
+      headers.set("Content-Type", "application/json");
+      console.log("headers Set @19");
+      return headers;
+    },
+  }),
   endpoints: (builder) => ({
     getCategories: builder.query<CategoryType[], void>({
-      query: (category) => "/categoryproducts",
+      query: (category) => "/homepage/categories",
     }),
   }),
 });

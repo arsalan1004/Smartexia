@@ -61,79 +61,85 @@ const SearchProductGridScreen = ({ route, navigation }: PropTypes) => {
 
   const [modalIsVisible, setModalIsVisible] = useState(false);
 
-  const discountedProducts = useSelector(
-    (state: RootState) => state.homeProduct.bestSelling
-  );
+  // const discountedProducts = useSelector(
+  //   (state: RootState) => state.homeProduct.bestSelling
+  // );
 
   const { sorting } = useSelector((state: RootState) => state.searchProduct);
 
   useFocusEffect(
     useCallback(() => {
       return () => {
+        console.log("SearchProductScreen Unmounted - 73");
         dispatch(resetSearchStates());
       };
     }, [])
   );
 
   useEffect(() => {
-    switch (sorting) {
-      case "asc":
-        setSortedProducts(
-          [...discountedProducts].sort((a, b) => a.price - b.price)
-        );
-        break;
-      case "desc":
-        setSortedProducts(
-          [...discountedProducts].sort((a, b) => b.price - a.price)
-        );
-        break;
-      case 1:
-        setSortedProducts(
-          [...discountedProducts].filter((product) => product.rating <= 1)
-        );
-        break;
-      case 2:
-        setSortedProducts(
-          [...discountedProducts].filter((product) => product.rating <= 2)
-        );
-        break;
-      case 3:
-        setSortedProducts(
-          [...discountedProducts].filter((product) => product.rating <= 3)
-        );
-        break;
-      case 4:
-        setSortedProducts(
-          [...discountedProducts].filter((product) => product.rating <= 4)
-        );
-        break;
-      case 5:
-        setSortedProducts(
-          [...discountedProducts].filter((product) => product.rating <= 5)
-        );
-        break;
-      case "none":
-        setSortedProducts([]);
-        break;
-      default:
-        break;
+    getSearchProductsHandler();
+  }, [searchQueryObject]);
+
+  useEffect(() => {
+    if (searchedProducts.length > 0) {
+      switch (sorting) {
+        case "asc":
+          setSortedProducts(
+            [...searchedProducts].sort((a, b) => a.price - b.price)
+          );
+          break;
+        case "desc":
+          setSortedProducts(
+            [...searchedProducts].sort((a, b) => b.price - a.price)
+          );
+          break;
+        case 1:
+          setSortedProducts(
+            [...searchedProducts].filter((product) => product.rating <= 1)
+          );
+          break;
+        case 2:
+          setSortedProducts(
+            [...searchedProducts].filter((product) => product.rating <= 2)
+          );
+          break;
+        case 3:
+          setSortedProducts(
+            [...searchedProducts].filter((product) => product.rating <= 3)
+          );
+          break;
+        case 4:
+          setSortedProducts(
+            [...searchedProducts].filter((product) => product.rating <= 4)
+          );
+          break;
+        case 5:
+          setSortedProducts(
+            [...searchedProducts].filter((product) => product.rating <= 5)
+          );
+          break;
+        case "none":
+          setSortedProducts([]);
+          break;
+        default:
+          break;
+      }
     }
   }, [sorting]);
 
-  useEffect(() => {
-    getSearchProductsHandler();
-  }, []);
-
   const getSearchProductsHandler = async () => {
-    // try {
-    //   const response = await getSearchedProducts(searchQueryObject).unwrap();
-    //   setSearchedProducts([...searchedProducts, ...response]);
-    //   setPage((p) => p + 1);
-    // } catch (error) {
-    //   console.log(error.data);
-    // }
-
-    // await new Promise((resolve) => setTimeout(resolve, 2000));
+    console.log("Search Query Object - 131");
+    console.log(searchQueryObject);
+    try {
+      const response = await getSearchedProducts(searchQueryObject).unwrap();
+      setSearchedProducts([...response]);
+      // setSearchedProducts([...searchedProducts, ...response]);
+      setPage((p) => p + 1);
+      console.log("Search Response - 135");
+      console.log(response);
+    } catch (error) {
+      console.log(error);
+    }
 
     console.log("Search Query: ", route.params.searchQuery);
   };
@@ -166,14 +172,14 @@ const SearchProductGridScreen = ({ route, navigation }: PropTypes) => {
         </Text>
         <Text style={styles.productNum}>
           {sortedProducts.length === 0
-            ? discountedProducts.length
+            ? searchedProducts.length
             : sortedProducts.length}{" "}
           Results Returned
         </Text>
       </View>
 
       <FlatList
-        data={sortedProducts.length === 0 ? discountedProducts : sortedProducts}
+        data={sortedProducts.length === 0 ? searchedProducts : sortedProducts}
         keyExtractor={(item) => item.id}
         renderItem={({ item }: ListRenderItemInfo<ProductType>) => (
           <ProductItem
@@ -189,8 +195,8 @@ const SearchProductGridScreen = ({ route, navigation }: PropTypes) => {
         initialNumToRender={PAGE_SIZE}
         windowSize={5}
         numColumns={2}
-        onEndReached={getSearchProductsHandler}
-        onEndReachedThreshold={0.5}
+        //onEndReached={getSearchProductsHandler}
+        //onEndReachedThreshold={0.5}
         showsHorizontalScrollIndicator={false}
         contentContainerStyle={{ gap: 20 }}
         style={styles.listStyle}

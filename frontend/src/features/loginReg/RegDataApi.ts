@@ -6,7 +6,7 @@ import { RegistrationFormFields } from "../../screens/loggedOutStack/Registratio
 
 export const RegDataApi = createApi({
   reducerPath: "RegDataApi",
-  baseQuery: fetchBaseQuery({ baseUrl: "http://192.168.2.100:5022" }),
+  baseQuery: fetchBaseQuery({ baseUrl: "http://192.168.2.103:5022" }),
   endpoints: (builder) => ({
     postRegData: builder.mutation({
       query: (data: Omit<RegistrationFormFields, "confirmPassword">) => ({
