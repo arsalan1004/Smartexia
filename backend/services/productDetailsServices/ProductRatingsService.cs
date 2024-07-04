@@ -19,10 +19,7 @@ public class ProductRatingsService
             float totalRatings = _smartexiaContext.Review.Where(x => x.productId == productId).Count();
             float overallRating = _smartexiaContext.Review.Where(x => x.productId == productId).Select(x => x.rating).Sum();
             
-            Console.WriteLine(totalRatings);
-            Console.WriteLine(overallRating);
             float rating = totalRatings == 0 ? 0 : overallRating / totalRatings;
-            Console.WriteLine(rating);
             
             ProductRatingsdto productRatingsdto = new ProductRatingsdto
             {
