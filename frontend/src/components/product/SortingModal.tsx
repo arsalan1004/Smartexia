@@ -76,7 +76,7 @@ const SortingModal = ({ modalIsVisible, closeModal }: PropTypes) => {
             {sortingOptions.map((option, index) => (
               <View style={styles.sortingOption}>
                 <TextButton
-                  key={index}
+                  key={index + 400}
                   title={option}
                   onPressAction={() => {
                     sortingHandler(option);
