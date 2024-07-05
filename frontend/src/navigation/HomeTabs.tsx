@@ -4,7 +4,7 @@ import {
   createBottomTabNavigator,
 } from "@react-navigation/bottom-tabs";
 import Home from "../screens/loggedInStack/homeTabs/Home";
-import Cart from "../screens/loggedInStack/homeTabs/Cart";
+import Cart from "../screens/loggedInStack/homeTabs/CartScreen";
 import More from "../screens/loggedInStack/homeTabs/More";
 import Search from "../screens/loggedInStack/homeTabs/Search";
 import TabBarButton from "../components/bottomTabs/TabBarButton";
@@ -13,6 +13,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { Pressable } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import HeaderCartButton from "../components/UI/HeaderCartButton";
+import CartScreen from "../screens/loggedInStack/homeTabs/CartScreen";
 
 type Props = {};
 
@@ -106,7 +107,7 @@ const HomeTabs = (props: Props) => {
       />
       <HomeBottomTab.Screen
         name="orders"
-        component={Cart}
+        component={CartScreen}
         options={{
           title: "Cart",
           tabBarButton: ({ accessibilityState }) => {
