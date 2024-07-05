@@ -65,7 +65,7 @@ public class CartPage:Controller
             
             var cartItems = await _smartexiaContext.CartItem.Where(x => x.cartId == userCart.id).Include(x=>x.product).Select(item => new
             {
-                productId = item.id,
+                productId = item.productId,
                 productName = item.product.name,
                 productPrice = item.product.price,
                 productQuantity = item.quantity,
@@ -135,7 +135,7 @@ public class CartPage:Controller
                 return Ok("Item added to cart");
             };
             
-            cartItem item =  _smartexiaContext.CartItem.FirstOrDefault(x => x.id == cartDetails.productId && x.cartId == userCart.id);
+            cartItem item =  _smartexiaContext.CartItem.FirstOrDefault(x => x.productId == cartDetails.productId && x.cartId == userCart.id);
 
             if (item is null)
             {
@@ -172,7 +172,7 @@ public class CartPage:Controller
                 return Ok("No cart found");
             };
             
-            cartItem item =  _smartexiaContext.CartItem.FirstOrDefault(x => x.id == cartDetails.productId && x.cartId == userCart.id);
+            cartItem item =  _smartexiaContext.CartItem.FirstOrDefault(x => x.productId == cartDetails.productId && x.cartId == userCart.id);
 
             if (item is null)
             {
