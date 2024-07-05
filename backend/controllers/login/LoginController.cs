@@ -31,20 +31,15 @@ public class LoginController: Controller
             if (user is not null)
             {
                 var token = await _firebaseAuth.Login(logindto.email, logindto.password);
-                Console.WriteLine("Tokenis");
-                Console.WriteLine(token);
                 if (token is "Incorrect Email or Password") return Unauthorized(new{message="Incorrect email or password", status=401});
                 
                 var decodedToken = await FirebaseAdmin.Auth.FirebaseAuth.DefaultInstance
                     .VerifyIdTokenAsync(token);
-                if (decodedToken is not null)
-                {
-                    Console.WriteLine("token is decoded successfully");
-                    Console.WriteLine(decodedToken.Issuer);
-                }
                 
+                var newUser = _smartexiaContext.User.Where(user => user.email == logindto.email).FirstOrDefault();
+
                 _httpContextAccessor.HttpContext?.Session.SetString("token", token);
-                return Ok(new {message="Login successful", status=200});
+                return Ok(new {userId=newUser.id, message="Login successful", status=200});
             }
 
             return NotFound(new {message = "Account does not exist", status=404});

@@ -44,8 +44,10 @@ public class GoogleSignupController:Controller
                 email = googlesignupdto.email,
             });
             await _smartexiaContext.SaveChangesAsync();
+            var newUser = _smartexiaContext.User.Where(user => user.email == googlesignupdto.email).FirstOrDefault();
             _httpContextAccessor.HttpContext?.Session.SetString("token", googlesignupdto.token);
-            return Ok(new {message = "Signup Successful", status = 200});
+            
+            return Ok(new {userId=newUser.id, message = "Signup Successful", status = 200});
         }
         catch (Exception e)
         {

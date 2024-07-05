@@ -48,9 +48,10 @@ public class RegisterController: Controller
 
             _smartexiaContext.Add(newUser);
             await _smartexiaContext.SaveChangesAsync();
-            
+            var addedUser = _smartexiaContext.User.Where(user => user.email == newUser.email).FirstOrDefault();
+
             _httpContextAccessor.HttpContext?.Session.SetString("token", token);
-            return Ok(new {message="Account created successfully", status=200});
+            return Ok(new {userId=addedUser.id, message="Account created successfully", status=200});
         }
         catch (Exception e)
         {
