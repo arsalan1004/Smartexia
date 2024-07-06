@@ -3,12 +3,22 @@ import React, { useState } from "react";
 import Cart from "../Cart";
 import TextButton from "../../../components/UI/TextButton";
 import { COLORS } from "../../../constants/colors";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 
-type Props = {};
+import { RootLoggedInStackParamList } from "../../../navigation/LoggedInStack";
+
+export type CartScreenNavigationProp = NativeStackNavigationProp<
+  RootLoggedInStackParamList,
+  "checkout"
+>;
+
+type PropTypes = {
+  navigation: CartScreenNavigationProp;
+};
 
 type ModeType = "cart" | "orders";
 
-const CartScreen = (props: Props) => {
+const CartScreen = ({ navigation }: PropTypes) => {
   const [mode, setMode] = useState<ModeType>("cart");
 
   return (

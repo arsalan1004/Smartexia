@@ -17,6 +17,7 @@ import HeaderCartButton from "../components/UI/HeaderCartButton";
 import { useNavigation } from "@react-navigation/native";
 import ProductReviewScreen from "../screens/loggedInStack/ProductReviewScreen";
 import { ReviewType } from "../features/productDetail/ProductDetailApi";
+import Checkout from "../screens/loggedInStack/Checkout";
 
 type Props = {};
 
@@ -43,6 +44,9 @@ export type RootLoggedInStackParamList = {
   };
   review: {
     reviewArray: ReviewType[];
+  };
+  checkout: {
+    cartItemPrice: Record<string, number>;
   };
 };
 
@@ -110,10 +114,13 @@ const LoggedInStack = () => {
         component={ProductReviewScreen}
         options={{ title: "Ratings & Reviews" }}
       />
+      <loggedInStack.Screen
+        name="checkout"
+        component={Checkout}
+        options={{ title: "Checkout" }}
+      />
     </loggedInStack.Navigator>
   );
 };
 
 export default LoggedInStack;
-
-const styles = StyleSheet.create({});

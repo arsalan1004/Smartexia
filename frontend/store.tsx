@@ -11,6 +11,7 @@ import SearchProductReducer from "./src/features/search/SearchProductSlice";
 import { ProductDetailApi } from "./src/features/productDetail/ProductDetailApi";
 import AuthSliceReducer from "./src/features/auth/AuthSlice";
 import { CartApi } from "./src/features/cart/CartApi";
+import { CheckoutApi } from "./src/features/checkout/CheckoutApi";
 
 const store = configureStore({
   reducer: {
@@ -21,6 +22,7 @@ const store = configureStore({
     [CategoryApi.reducerPath]: CategoryApi.reducer,
     [CategoryProductsApi.reducerPath]: CategoryProductsApi.reducer,
     [ProductDetailApi.reducerPath]: ProductDetailApi.reducer,
+    [CheckoutApi.reducerPath]: CheckoutApi.reducer,
     [CartApi.reducerPath]: CartApi.reducer,
     auth: AuthSliceReducer,
     homeProduct: HomeProductReducer,
@@ -36,6 +38,7 @@ const store = configureStore({
       CategoryProductsApi.middleware,
       ProductDetailApi.middleware,
       CartApi.middleware,
+      CheckoutApi.middleware,
     ]),
 });
 

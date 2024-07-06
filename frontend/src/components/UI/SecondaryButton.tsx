@@ -7,13 +7,33 @@ type PropTypes = {
   title: string;
   children: React.ReactNode;
   onPressAction: () => void;
+  bottomPosition?: number;
+  disabled?: boolean;
 };
 
-const SecondaryButton = ({ children, title, onPressAction }: PropTypes) => {
+const SecondaryButton = ({
+  children,
+  title,
+  onPressAction,
+  bottomPosition = -1,
+  disabled = false,
+}: PropTypes) => {
+  // console.log("SecondaryBTN : is Valid", disabled);
+
   return (
     <Pressable
       onPress={onPressAction}
-      style={({ pressed }) => [pressed && styles.pressed]}
+      style={({ pressed }) => [
+        pressed && styles.pressed,
+        styles.buttonContainer,
+        disabled
+          ? { backgroundColor: COLORS.textGray }
+          : { backgroundColor: COLORS.fgPrimary },
+
+        bottomPosition !== -1
+          ? { position: "absolute", bottom: bottomPosition }
+          : null,
+      ]}
     >
       <View style={styles.buttonContainer}>
         <View style={styles.iconTextContainer}>
@@ -32,9 +52,10 @@ const styles = StyleSheet.create({
   buttonContainer: {
     flexDirection: "row",
     justifyContent: "space-between",
-    backgroundColor: COLORS.fgPrimary,
-    padding: 10,
+    // backgroundColor: COLORS.fgPrimary,
+    padding: 5,
     borderRadius: 10,
+    width: "100%",
   },
   iconTextContainer: {
     flexDirection: "row",
