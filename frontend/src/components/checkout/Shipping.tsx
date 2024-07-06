@@ -33,7 +33,15 @@ const Shipping = ({ onShippingComplete }: PropTypes) => {
     handleSubmit,
 
     formState: { errors, isSubmitSuccessful, isValid },
-  } = useForm<ShippingFormFields>({});
+  } = useForm<ShippingFormFields>({
+    defaultValues: {
+      fullName: "Muhammad Zain",
+      street: "Syed Ali St. Block 15 R-1142",
+      city: "Karachi",
+      postalCode: "78097",
+      phoneNumber: "0324 1215122",
+    },
+  });
 
   const scrollViewRef = useRef<ScrollView>(null);
   const [keyboardIsVisible, setKeyboardIsVisible] = useState(false);

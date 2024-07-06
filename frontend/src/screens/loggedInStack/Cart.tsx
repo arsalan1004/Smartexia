@@ -162,7 +162,8 @@ const Cart = (props: PropTypes) => {
 
     // filling cartItemPriceObject
     cartItems.forEach((item) => {
-      cartItemPriceObject[item.productName] = item.productPrice;
+      cartItemPriceObject[item.productName] =
+        item.productPrice * item.productQuantity;
     });
 
     navigation.navigate("checkout", { cartItemPrice: cartItemPriceObject });

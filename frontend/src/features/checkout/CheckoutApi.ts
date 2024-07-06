@@ -20,7 +20,7 @@ export const CheckoutApi = createApi({
       query: (amount: number) => ({
         url: "/checkout/payment",
         method: "POST",
-        body: { amount: amount },
+        body: { Amount: amount },
       }),
     }),
   }),

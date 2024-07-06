@@ -8,10 +8,10 @@ import { StripeProvider } from "@stripe/stripe-react-native";
 
 type PropTypes = {
   amount: number;
-  onPaymentComplete: () => void;
+  openPaymentSheet: () => Promise<void>;
 };
 
-const Payment = ({ amount, onPaymentComplete }: PropTypes) => {
+const Payment = ({ amount, openPaymentSheet }: PropTypes) => {
   const [amountIsValid, setAmountIsValid] = useState("untouched");
 
   const onChangeTextHandler = (text: string) => {
@@ -40,11 +40,13 @@ const Payment = ({ amount, onPaymentComplete }: PropTypes) => {
         style={[loginRegStyles.fieldContainer, styles.fieldStyles]}
         onChangeText={onChangeTextHandler}
       />
-      {amountIsValid === "false" && <Text>Amount entered is incorrect</Text>}
+      {amountIsValid === "false" && (
+        <Text style={{ alignSelf: "center" }}>Amount entered is incorrect</Text>
+      )}
 
       <SecondaryButton
         title="Perform Payment"
-        onPressAction={onPaymentComplete}
+        onPressAction={openPaymentSheet}
         bottomPosition={20}
         disabled={!amountIsValid}
       >
