@@ -5,18 +5,26 @@ import {
   Text,
   View,
 } from "react-native";
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import {
   CartItemType,
+  QuantityControlArgType,
+  useDecrementQuantityMutation,
+  useDeleteCartItemMutation,
   useGetCartItemsMutation,
+  useIncrementQuantityMutation,
 } from "../../features/cart/CartApi";
 import { COLORS, h3Oxygen, h4Oxygen } from "../../constants/colors";
 
 import CartItem from "../../components/cart/CartItem";
 import SecondaryButton from "../../components/UI/SecondaryButton";
 import Checkout from "../../../assets/images/toCheckout.svg";
+import { useSelector } from "react-redux";
+import { RootState } from "../../../store";
+import { useFocusEffect } from "@react-navigation/native";
+import EmptyCart from "../../../assets/images/noCartItems.svg";
 
-type Props = {};
+type PropTypes = {};
 
 const dummy_cart: CartItemType[] = [
   {
@@ -42,33 +50,112 @@ const dummy_cart: CartItemType[] = [
   },
 ];
 
-const Cart = (props: Props) => {
-  // const [getCartItems, { isLoading, isSuccess }] = useGetCartItemsMutation();
-  const [cartItems, setCartItems] = useState<CartItemType[]>(dummy_cart);
+const Cart = (props: PropTypes) => {
+  const [getCartItems, { isLoading }] = useGetCartItemsMutation();
 
-  // if (cartItems?.length === 0 ) {
-  //   if(isLoading) {
-  //     return (
-  //       <View style={styles.loading}>
-  //         <ActivityIndicator size={"large"} color={COLORS.fgPrimary} />
-  //       </View>
-  //     );
-  //   }
-  //   if(isSuccess) {
-  //     return (
-  //       <View>
-  //         <Text>Cart is empty</Text>
-  //       </View>
-  //     );
-  //   }
-  // }
+  const [incrementQuantity, { isLoading: incrementLoading }] =
+    useIncrementQuantityMutation();
+  const [decrementQuantity, { isLoading: decrementLoading }] =
+    useDecrementQuantityMutation();
+  const [deleteCartItem, { isLoading: deleteLoading }] =
+    useDeleteCartItemMutation();
+
+  const [cartItems, setCartItems] = useState<CartItemType[]>(dummy_cart);
+  // const [count, setCount] = useState(0);
+  const { userId } = useSelector((state: RootState) => state.auth);
+
+  useFocusEffect(
+    useCallback(() => {
+      const getCartItemsHandler = async () => {
+        console.log("in getCartItemsHandler @ 55 FOCUS EFFECT - Cart.tsx");
+        try {
+          const response = await getCartItems(userId).unwrap();
+          setCartItems(response);
+          console.log(response);
+        } catch (error) {
+          console.log(error);
+          setCartItems([]);
+        }
+      };
+
+      getCartItemsHandler();
+    }, [
+      userId,
+      getCartItems,
+      incrementLoading,
+      decrementLoading,
+      deleteLoading,
+    ])
+  );
+
+  console.log("IN cart @50");
+
+  if (cartItems?.length === 0) {
+    if (isLoading) {
+      return (
+        <View style={styles.loading}>
+          <ActivityIndicator size={"large"} color={COLORS.fgPrimary} />
+        </View>
+      );
+    } else
+      return (
+        <View
+          style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
+        >
+          <EmptyCart width={120} height={120} />
+          <Text style={{ ...h3Oxygen, color: COLORS.fgPrimary }}>
+            Cart is Empty
+          </Text>
+        </View>
+      );
+  }
+
+  const incrementQuantityHandler = async (
+    queryObject: QuantityControlArgType
+  ) => {
+    console.log("Multi Increment Called", queryObject);
+    try {
+      const response = await incrementQuantity(queryObject).unwrap();
+      console.log(response);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const decrementQuantityHandler = async (
+    queryObject: QuantityControlArgType
+  ) => {
+    try {
+      const response = await decrementQuantity(queryObject).unwrap();
+      console.log(response);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const deleteCartItemHandler = async (
+    queryObject: Omit<QuantityControlArgType, "quantity">
+  ) => {
+    try {
+      const response = await deleteCartItem(queryObject).unwrap();
+      console.log(response);
+    } catch (error) {
+      console.log("error received");
+      console.log(error);
+    }
+  };
 
   return (
     <ScrollView>
       <View style={styles.container}>
         <View style={styles.cartItemsContainer}>
           {cartItems.map((item) => (
-            <CartItem key={item.productId} {...item} />
+            <CartItem
+              key={item.productId}
+              {...item}
+              incrementQuantityHandler={incrementQuantityHandler}
+              decrementQuantityHandler={decrementQuantityHandler}
+              deleteCartItemHandler={deleteCartItemHandler}
+            />
           ))}
         </View>
 
@@ -79,7 +166,8 @@ const Cart = (props: Props) => {
             <Text style={styles.grandTotal}>
               ${" "}
               {cartItems.reduce(
-                (acc, item) => acc + item.productPrice * item.productQuantity,
+                (acc, item) =>
+                  acc + Math.round(item.productPrice) * item.productQuantity,
                 0
               )}
             </Text>

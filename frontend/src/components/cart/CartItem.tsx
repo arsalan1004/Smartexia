@@ -2,8 +2,7 @@ import { Image, Pressable, StyleSheet, Text, View } from "react-native";
 import React, { useState } from "react";
 import {
   CartItemType,
-  useDeleteCartItemMutation,
-  useIncrementQuantityMutation,
+  QuantityControlArgType,
 } from "../../features/cart/CartApi";
 import { COLORS, h4Oxygen } from "../../constants/colors";
 import QuantityControlInput from "../Inputs/QuantityControlInput";
@@ -11,75 +10,68 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../store";
 
+type CartItemCompType = CartItemType & {
+  incrementQuantityHandler: (queryObject: QuantityControlArgType) => void;
+  decrementQuantityHandler: (queryObject: QuantityControlArgType) => void;
+  deleteCartItemHandler: (
+    queryObject: Omit<QuantityControlArgType, "quantity">
+  ) => void;
+};
+
 const CartItem = ({
   productId,
   productName,
   productQuantity,
   productPrice,
   image,
-}: CartItemType) => {
+  incrementQuantityHandler,
+  decrementQuantityHandler,
+  deleteCartItemHandler,
+}: CartItemCompType) => {
   console.log(productName, productQuantity, productPrice, image);
-  const [quantity, setQuantity] = useState(1);
-  const { userId } = useSelector((state: RootState) => state.auth);
 
-  const [incrementQuantity] = useIncrementQuantityMutation();
-  const [decrementQuantity] = useIncrementQuantityMutation();
-  const [deleteCartItem] = useDeleteCartItemMutation();
+  const [quantity, setQuantity] = useState("1");
+
+  const { userId } = useSelector((state: RootState) => state.auth);
 
   const handleQuantityChange = (quantity: string) => {
     if (quantity.length === 2 && quantity.match(/[0-9]/)) {
-      setQuantity(Number(quantity[1]));
+      setQuantity(quantity[1]);
     }
     console.log("Quantity: ", quantity);
   };
 
-  const incrementQuantityHandler = () => {
+  const onIncrementQuantity = async () => {
     const queryObject = {
       userId: userId,
       productId: Number(productId),
-      quantity: quantity,
+      quantity: Number(quantity),
     };
-
     console.log("Multi Increment Called", queryObject);
-    // try {
-    //   const response = await incrementQuantity(queryObject).unwrap();
-    //   console.log(response);
-    //   setQuantity("0");
-    // } catch (error) {
-    //   console.log(error);
-    // }
+    incrementQuantityHandler(queryObject);
+    setQuantity("0");
   };
-  const decrementQuantityHandler = () => {
+  const onDecrementQuantity = async () => {
     const queryObject = {
       userId: userId,
       productId: Number(productId),
-      quantity: quantity,
+      quantity: Number(quantity),
     };
 
     console.log("Multi Decrement Called", queryObject);
-    // try {
-    //   const response = await decrementQuantity(queryObject).unwrap();
-    //   console.log(response);
-    //   setQuantity("0");
-    // } catch (error) {
-    //   console.log(error);
-    // }
+    decrementQuantityHandler(queryObject);
+    setQuantity("0");
   };
 
-  const cartItemDeleteHandler = () => {
+  const onDeleteCartItem = async () => {
     const queryObject = {
       userId: userId,
       productId: Number(productId),
     };
 
     console.log("Delete Called", queryObject);
-    // try {
-    //   const response = await deleteCartItem(queryObject).unwrap();
-    //   console.log(response);
-    //   setQuantity("0");
-    // } catch (error) {
-    //   console.log(error);
-    // }
+    deleteCartItemHandler(queryObject);
+    setQuantity("0");
   };
 
   return (
@@ -95,18 +87,20 @@ const CartItem = ({
           <View style={styles.cartItemDetails}>
             <Text style={styles.name}>{productName}</Text>
             <Text style={styles.quantity}>Quantity: {productQuantity}</Text>
-            <Text style={styles.price}>$ {productPrice}</Text>
+            <Text style={styles.price}>
+              $ {Math.round(productPrice) * productQuantity}
+            </Text>
           </View>
         </View>
         <View style={styles.cartControl}>
-          <Pressable onPress={cartItemDeleteHandler}>
+          <Pressable onPress={onDeleteCartItem}>
             <View style={styles.deleteCartItemButton}>
               <Ionicons name="trash" size={30} color={COLORS.fgPrimary} />
             </View>
           </Pressable>
           <QuantityControlInput
-            incrementQuantity={incrementQuantityHandler}
-            decrementQuantity={decrementQuantityHandler}
+            incrementQuantity={onIncrementQuantity}
+            decrementQuantity={onDecrementQuantity}
             onChangeQuantityInput={handleQuantityChange}
             quantity={quantity.toString()}
           />

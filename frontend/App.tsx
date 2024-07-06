@@ -86,29 +86,30 @@ function App() {
       try {
         // load onBoardingComplete from AsyncStorage
 
-        const isUserLoggedIn = await AsyncStorage.getItem("@isLoggedIn");
-        updateIsLoggedIn(false);
-        if (isUserLoggedIn !== null) {
-          console.log("User is Logged In");
-          //updateIsLoggedIn(true);
-          updateIsLoggedIn(false);
-          setOnBoardingComplete("true");
-          console.log(isUserLoggedIn);
-        } else {
-          console.log("User is not Logged In");
-        }
+        // const isUserLoggedIn = await AsyncStorage.getItem("@isLoggedIn");
 
-        const isOnBoardingComplete: OnBoardingCompleteType | null =
-          (await AsyncStorage.getItem(
-            "@onBoardingComplete"
-          )) as OnBoardingCompleteType | null;
+        // if (isUserLoggedIn !== null) {
+        //   console.log("User is Logged In");
+        //   //updateIsLoggedIn(true);
+        //   updateIsLoggedIn(true);
+        //   setOnBoardingComplete("true");
+        //   console.log(isUserLoggedIn);
+        // } else {
+        //   console.log("User is not Logged In");
+        // }
 
-        if (onBoardingComplete !== null) {
-          setOnBoardingComplete(isOnBoardingComplete!);
-          // setOnBoardingComplete("false");
-        } else {
-          setOnBoardingComplete("false");
-        }
+        setOnBoardingComplete("true");
+        // const isOnBoardingComplete: OnBoardingCompleteType | null =
+        //   (await AsyncStorage.getItem(
+        //     "@onBoardingComplete"
+        //   )) as OnBoardingCompleteType | null;
+
+        // if (onBoardingComplete !== null) {
+        //   setOnBoardingComplete(isOnBoardingComplete!);
+        //   // setOnBoardingComplete("false");
+        // } else {
+        //   setOnBoardingComplete("false");
+        // }
 
         await new Promise((resolve) => setTimeout(resolve, 500));
       } catch (e) {
@@ -259,7 +260,7 @@ function App() {
               dotSelected === 2 ? compeleteOnBoarding : incrementDotSelected
             }
           />
-        ) : true ? (
+        ) : isLoggedIn ? (
           <LoggedInStack />
         ) : (
           <LoggedOutStack />

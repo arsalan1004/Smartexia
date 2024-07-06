@@ -51,6 +51,7 @@ PropTypes) => {
     >();
 
   const { userId } = useSelector((state: RootState) => state.auth);
+
   const [incrementQuantity] = useIncrementQuantityMutation();
 
   const onPressHandler = () => {
@@ -66,12 +67,13 @@ PropTypes) => {
       quantity: 1,
     };
     console.log("Single Increment called");
-    // try {
-    //   const response = await incrementQuantity(queryArg).unwrap();
-    //   console.log(response);
-    // } catch (err) {
-    //   console.log(err);
-    // }
+    try {
+      const response = await incrementQuantity(queryArg).unwrap();
+      console.log(response);
+      console.log(response);
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   return (

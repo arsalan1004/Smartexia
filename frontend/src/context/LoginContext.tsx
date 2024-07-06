@@ -15,11 +15,11 @@ type LoginContextProvider = {
 };
 
 export const LoginProvider = ({ children }: LoginContextProvider) => {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(true);
 
   const updateIsLoggedIn = (value: boolean) => {
     console.log("updateIsLoggedIn In Context", value);
-    setIsLoggedIn((isLoggedIn) => !isLoggedIn);
+    // setIsLoggedIn((isLoggedIn) => !isLoggedIn);
   };
 
   return (

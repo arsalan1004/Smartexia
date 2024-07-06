@@ -21,13 +21,21 @@ export type QuantityControlArgType = {
 
 export const CartApi = createApi({
   reducerPath: "cartApi",
-  baseQuery: fetchBaseQuery({ baseUrl: "http://192.168.2.100:5022" }),
+  baseQuery: fetchBaseQuery({
+    baseUrl: "http://192.168.2.100:5022",
+    prepareHeaders: (headers) => {
+      // Set the Content-Type header to application/json
+      headers.set("Content-Type", "application/json");
+      console.log("headers Set @19");
+      return headers;
+    },
+  }),
   endpoints: (builder) => ({
     getCartItems: builder.mutation<CartItemType[] | [], number>({
       query: (userId: number) => ({
         url: "/cart/get",
         method: "POST",
-        body: userId,
+        body: { userId: Number(userId) },
       }),
     }),
     incrementQuantity: builder.mutation<CartItemType, QuantityControlArgType>({
@@ -44,10 +52,13 @@ export const CartApi = createApi({
         body: quantityObject,
       }),
     }),
-    deleteCartItem: builder.mutation<CartItemType, QuantityControlArgType>({
+    deleteCartItem: builder.mutation<
+      CartItemType,
+      Omit<QuantityControlArgType, "quantity">
+    >({
       query: (quantityObject: Omit<QuantityControlArgType, "quantity">) => ({
         url: "/cart/delete",
-        method: "POST",
+        method: "DELETE",
         body: quantityObject,
       }),
     }),

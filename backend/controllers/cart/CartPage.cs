@@ -1,9 +1,12 @@
 using ApiDependencies.filters.authFiler;
 using backend.data;
+
 using backend.DTOs.cartDto;
+
 using Microsoft.AspNetCore.Mvc;
 using backend.models.cart;
 using backend.models.cartItem;
+
 using Microsoft.EntityFrameworkCore;
 
 namespace backend.controllers.cart;
@@ -56,11 +59,11 @@ public class CartPage:Controller
     [HttpPost]
     [Route("cart/get")]
     //[ServiceFilter(typeof(TokenAuthenticationFilter))]
-    public async Task<IActionResult> getCart([FromBody] int userId)
+    public async Task<IActionResult> getCart([FromBody] getCartdto cartDto)
     {
         try
         {
-            models.cart.cart userCart =  _smartexiaContext.Cart.FirstOrDefault(x => x.userId == userId);
+            models.cart.cart userCart =  _smartexiaContext.Cart.FirstOrDefault(x => x.userId == cartDto.userId);
             if (userCart is null) return Ok(new {message = "Cart is empty", status=200});
             
             var cartItems = await _smartexiaContext.CartItem.Where(x => x.cartId == userCart.id).Include(x=>x.product).Select(item => new
