@@ -23,8 +23,9 @@ import { useSelector } from "react-redux";
 import { RootState } from "../../../store";
 import { useFocusEffect } from "@react-navigation/native";
 import EmptyCart from "../../../assets/images/noCartItems.svg";
-
-type PropTypes = {};
+import { useNavigation } from "@react-navigation/native";
+import { RootLoggedInStackParamList } from "../../navigation/LoggedInStack";
+import { NativeStackNavigationProp } from "react-native-screens/lib/typescript/native-stack/types";
 
 const dummy_cart: CartItemType[] = [
   {
@@ -50,6 +51,8 @@ const dummy_cart: CartItemType[] = [
   },
 ];
 
+type PropTypes = {};
+
 const Cart = (props: PropTypes) => {
   const [getCartItems, { isLoading }] = useGetCartItemsMutation();
 
@@ -63,6 +66,11 @@ const Cart = (props: PropTypes) => {
   const [cartItems, setCartItems] = useState<CartItemType[]>(dummy_cart);
   // const [count, setCount] = useState(0);
   const { userId } = useSelector((state: RootState) => state.auth);
+
+  const navigation =
+    useNavigation<
+      NativeStackNavigationProp<RootLoggedInStackParamList, "checkout">
+    >();
 
   useFocusEffect(
     useCallback(() => {
@@ -144,6 +152,23 @@ const Cart = (props: PropTypes) => {
     }
   };
 
+  const cartTotal = cartItems.reduce(
+    (acc, item) => acc + Math.round(item.productPrice) * item.productQuantity,
+    0
+  );
+
+  const onNavigateToCheckout = () => {
+    const cartItemPriceObject: Record<string, number> = {};
+
+    // filling cartItemPriceObject
+    cartItems.forEach((item) => {
+      cartItemPriceObject[item.productName] =
+        item.productPrice * item.productQuantity;
+    });
+
+    navigation.navigate("checkout", { cartItemPrice: cartItemPriceObject });
+  };
+
   return (
     <ScrollView>
       <View style={styles.container}>
@@ -163,20 +188,13 @@ const Cart = (props: PropTypes) => {
           <Text style={styles.summaryText}>Order Summary</Text>
           <View style={styles.summaryInfo}>
             <Text style={styles.totalText}>Grand Total</Text>
-            <Text style={styles.grandTotal}>
-              ${" "}
-              {cartItems.reduce(
-                (acc, item) =>
-                  acc + Math.round(item.productPrice) * item.productQuantity,
-                0
-              )}
-            </Text>
+            <Text style={styles.grandTotal}>$ {cartTotal}</Text>
           </View>
         </View>
         <View style={{ marginVertical: 20 }}>
           <SecondaryButton
             title="Continue to Checkout"
-            onPressAction={() => console.log("checkout")}
+            onPressAction={() => onNavigateToCheckout()}
           >
             <Checkout color={COLORS.accent} />
           </SecondaryButton>
