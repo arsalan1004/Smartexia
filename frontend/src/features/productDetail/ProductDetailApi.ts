@@ -32,7 +32,7 @@ export type ProductDetailType = CategoryProductType & {
 
 export const ProductDetailApi = createApi({
   reducerPath: "productDetailApi",
-  baseQuery: fetchBaseQuery({ baseUrl: "http://192.168.2.100:5022" }),
+  baseQuery: fetchBaseQuery({ baseUrl: "http://192.168.98.203:5022" }),
   endpoints: (builder) => ({
     getProductDetails: builder.mutation<ProductDetailType, number>({
       query: (productId: number) => ({

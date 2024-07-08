@@ -98,7 +98,7 @@ function App() {
         //   console.log("User is not Logged In");
         // }
 
-        setOnBoardingComplete("true");
+        setOnBoardingComplete("false");
         // const isOnBoardingComplete: OnBoardingCompleteType | null =
         //   (await AsyncStorage.getItem(
         //     "@onBoardingComplete"
@@ -122,7 +122,8 @@ function App() {
   }, []);
   useEffect(() => {
     console.log("isLoggedIn", isLoggedIn);
-  }, [isLoggedIn]);
+    // updateIsLoggedIn(true);
+  }, [onBoardingComplete]);
   //useEffect(() => {}, [onBoardingComplete]);
 
   const onLayoutRootView = useCallback(async () => {
