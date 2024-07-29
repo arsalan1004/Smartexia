@@ -16,8 +16,7 @@
       "launchUrl": "swagger",
       "applicationUrl": "http://192.168.98.203:5022",
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development",
-        "DbConnectionString": "Username=postgres.snpcbtwpjfvkowujonqs;Password=Syed&arsalan1004;Host=aws-0-ap-southeast-1.pooler.supabase.com;Port=5432;Database=postgres;SSL Mode=Require;Trust Server Certificate=true"
+        "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
     "https": {
