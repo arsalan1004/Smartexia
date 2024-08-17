@@ -2,6 +2,7 @@
 
 Smartexia is an innovative e-commerce application designed for buying and selling smart appliances. It provides a seamless platform for users to manage, buy, and sell a wide range of smart devices that enhance home automation and connectivity. Smartexia features a user-friendly interface and robust functionalities to cater to all your smart appliance needs.
 
+### [<img src="https://www.vectorlogo.zone/logos/figma/figma-icon.svg" alt="figma" width="20" height="20"/> Figma Design (Demo)](https://www.figma.com/proto/kLIpOEmLKaLM9dgd6S2bsK/Untitled?node-id=445-4655&t=FSKX6ZmZgJGtbY79-0&scaling=min-zoom&content-scaling=fixed&page-id=445%3A1271) 
 ## Table of Contents
 - [Features](#features)
 - [Technologies Used](#technologies-used)
@@ -26,14 +27,14 @@ Smartexia is an innovative e-commerce application designed for buying and sellin
 <li><strong>Notifications</strong>: Receive notifications for order status and special offers.</li>
 </ul>
 
-<a name="technologies-used"></a>
+
 ## Technologies Used
 <ul>
-<li><strong>Frontend</strong>: React Native, Redux, HTML5, CSS3, JavaScript</li>
+<li><strong>Frontend</strong>: React Native, TypeScript, Redux, RTK Query, React-Hook-Forms + (Planned To add Zod Validation)</li>
 <li><strong>Backend</strong>: ASP.NET Core Web API, Entity Framework Core, C#, LINQ (Language Integrated Query), Dependency Injection, Swagger, AutoMapper</li>
 <li><strong>Database</strong>: Supabase (postgresql)</li>
-<li><strong>Payment Gateway</strong>: Stripe</li>
-<li><strong>Authentication</strong>: JWT, OAuth</li>
+<li><strong>Payment Gateway</strong>: Stripe (Payment Sheet API)</li>
+<li><strong>Authentication</strong>: JWT, OAuth (Google) </li>
 </ul>
 
 <a name="installation"></a>
@@ -140,9 +141,13 @@ cd smartexia
 <li>Create a pull request.</li>
 </ol>
 
+<!---
 <a name="license"></a>
 ## License
 <p>This project is licensed under the MIT License. See the <a href="LICENSE">LICENSE</a> file for details.</p>
+-->
+
+
 
 ---
 
